@@ -275,22 +275,22 @@
         if (displayDouble && (nextPage == totalPages || nextPage + 1 == totalPages)) {
           // If going to last page, go to front cover.
           // event.preventDefault();
-          $('#flipbook').turn('page', 2).turn('stop');
+          $('#flipbook').turn('page', 2);//.turn('stop');
         }else if(!displayDouble && (nextPage == totalPages || nextPage == totalPages + 1)){
-          $('#flipbook').turn('page', 2).turn('stop');
+          $('#flipbook').turn('page', 2);//.turn('stop');
         }else {
-          $('#flipbook').turn('next').turn('stop');
+          $('#flipbook').turn('next');//.turn('stop');
         }
       } else if (corner === "left") {
         // console.log("Left corner");
         nextPage -= 1;
         if (displayDouble && (nextPage == 1 || nextPage == 2)) {
           // If going to front cover, go to last page instead.
-          $('#flipbook').turn('page', totalPages - 1).turn('stop');
+          $('#flipbook').turn('page', totalPages - 1);//.turn('stop');
         } else if (!displayDouble && (nextPage == 1 || nextPage == 0)){
-          $('#flipbook').turn('page', totalPages - 1).turn('stop');
+          $('#flipbook').turn('page', totalPages - 1);//.turn('stop');
         } else {
-          $('#flipbook').turn('previous').turn('stop');
+          $('#flipbook').turn('previous');//.turn('stop');
         }
       }
     });
