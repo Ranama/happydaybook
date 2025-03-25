@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy day book</title>
+  <!-- Page description -->
+  <meta name="description" content="Answer 3 questions everyday to massively improve your life, mood and hapiness, Inspired by the 5 minute journal." />
+  <!-- Page favicon -->
+  <link rel="icon" href="icon.png" />
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <style>
+    /* Remove extra margin and padding from main boxes */
+    #flipbook {
+      background-color: #acbbca;
+    }
+    .journal-page, .morning, .evening {
+      margin: 0;
+      padding: 0;
+    }
+    .journal-page {
+      width: 50vw; /* two pages per viewport */
+      height: 100vh;
+      overflow-y: auto;
+      box-sizing: border-box;
+      border: 1px solid #ddd; /* optional, to mimic a page border */
+      text-align: center;
+      background-color: #acbbca;
+    }
+    /* Morning section with light background */
+    .morning {
+      background-color: #fff9e8;
+      padding:10px;
+      padding-top: 0;
+    }
+    /* Evening section with dark background */
+    .evening {
+      padding:10px;
+      padding-bottom: 0;
+    }
+    .hard {
+      background-color: #fff9e8;
+    }
+    
+    /* Spacing for Bootstrap input groups */
+    .input-group {
+      margin-bottom: 10px;
+      text-align: left;
+    }
+    h5{
+        font-weight: bold;
+    }
+    .sun {
+        font-size: 50px;
+        margin: 20px 60px -120px 0px;
+        color: rgba(0,0,0,0.5);
+    }
+    .moon{
+        font-size: 24px;
+        margin-right: 10px;
+        color: rgba(0,0,0,0.5);
+    }
+    @media (max-width: 800px) {
+      .sun{
+        font-size: 24px;
+        margin: 20px 0px -34px 0px;
+        color: rgba(0,0,0,0.5);
+      }
+    }
+    @media (max-width: 600px) {
+      #example_day .journal-page {
+        width: 100vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Audio element for the page-flip sound -->
+  <audio id="page-flip-sound" src="turnpage-99756.mp3"></audio>
+    <div id="flipbook">
+        <div class="hard journal-page"> <h1>Loading...</h1></div>
+        <div id="info_page" class="hard journal-page">
+            <div class="row justify-content-center">
+                <div class="col-8">
+                    <h3>How to use?</h3>
+                        <div class="border text-start rounded p-1"><i class="bi bi-sun-fill"></i> Answer 3 morning questions as soon as you wake up.</div>
+                        <div class="border text-start rounded p-1" style="background-color: #acbbca;"><i class="bi bi-moon-fill"></i> Answer 2 evening questions before you go to sleep.</div>
+                    </ol>
+                    <p class="text-start">Every day you will get a new page to fill out. <br>It's that simple!</p>
+                    <p class="text-start">It's not important what you write, <b>the only important thing is that you write something everyday</b>, this will change your mind into looking for positive things within your life and destroy your negative thought patterns.</p>
+                
+                    <p class="text-start"></p>
+                    <p class="text-start">If you need a positive motivation, you can go back and look at previous days, see what you have been greatful for and acomplished.</p>
+                    <p class="text-start">
+                      <b>Pages: <span id="pages_amount">1337</span></b> Navigate by pulling corners <i class="bi bi-file-earmark-text"></i> <i class="bi bi-sticky"></i> or use <span class="bi bi-arrow-left-square"></span> / <span class="bi bi-arrow-right-square"></span> arrow keys.
+                      <button id="save" class = "btn btn-sm btn-success"><i class="bi bi-cloud-download"></i> Save</button>
+                      <button id="import" class = "btn btn-sm btn-primary"><i class="bi bi-cloud-upload"></i> Import</button>
+                    </p>
+                  </div>
+                <div class="col-10">
+                    <h3>Why journal?</h3>
+                    <p class="text-start">
+                        Journaling is the most simple daily habit that can transform your mental and emotional well‐being. Take a few minutes each day to write down your thoughts, feelings, and experiences. Research in psychology shows that regular journaling lowers anxiety, boost mood, and even help prevent depression. When you document your day, you reflect on your successes and also learn valuable lessons from challenges, which creates a positive mindset.
+                    </p>
+                    <p class="text-start">
+                        Science-backed studies found that spending less than 5 minutes each day will clear your mind, improve your overall mental clarity, destory negative thought patterns and replace them with positive ones. As you track your progress and celebrate small victories, you naturally cultivate gratitude and self-awareness, two key ingredients for long-term happiness.
+                    </p>
+                    <p class="text-start">
+                        Journaling serves as a form of self-care that is accessible to everyone. It requires nothing more than a few minutes every day, yet its impact is profound. Whether you’re setting goals, expressing gratitude, or simply venting your thoughts, journaling encourages you to look inward and grow from within. Embracing this habit can not only enhance your mood on a daily basis but also create a foundation for a healthier, happier life. Give journaling a try—you will find that it’s the best free tool available for improving your mental health and overall quality of life.
+                    </p>
+                    </div>
+            </div>
+            <h3>Example day:</h3>
+            <div id="example_day"></div>
+        </div>
+    </div>
+
+
+  <!-- jQuery and Bootstrap Bundle JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Turn.js (from CDN) -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/3/turn.min.js"></script>
+  <script type="text/javascript">
+    /* 
+    Using this plugin: http://www.turnjs.com/ 
+    plugin api documentation: http://www.turnjs.com/turnjs4-api-docs.pdf
+    */
+   /* ####################### Load journal ################################### */
+    pagesRendered = false;
+    // Render the journal on document ready using the sample data.
+    $(document).ready(function () {
+      renderJournal();
+
+      // Turn to the last page 
+	    $('#flipbook').turn('page', $('#flipbook').turn('pages') - 1);
+      
+      pagesRendered = true;
+    });
+
+    /* ####################### Data change  ################################### */
+    // On data changing in any of the input or text fields, update the JSON dictionary in the localStorage
+    $(document).on("keyup", "input, textarea", function() {
+        let date = $(this).closest(".journal-page").attr("id").replace("date-", "");
+        let jsonData = getJsonFromPage(date);
+        // Save the JSON data to localStorage
+        localStorage.setItem(date, JSON.stringify(jsonData));
+    });
+
+    /* ####################### Navigation ################################### */
+    // Navigation on key press left and right arrow keys
+    $(document).keydown(function (e) {
+      let pages = $('#flipbook').turn('pages');
+      let page = $('#flipbook').turn('page');
+      let displaySingle = $('#flipbook').turn('display') == "single";
+      if (e.keyCode == 37) {
+        if((displaySingle && page == 2) || (!displaySingle && (page == 2 || page == 3))){
+          $("#flipbook").turn("page", pages - 1);
+        }else{
+          $("#flipbook").turn("previous");
+        }
+      } else if (e.keyCode == 39) {
+        if((displaySingle && page == pages - 1) || (!displaySingle && (page == pages - 1 ||  page== pages - 2))){
+          $("#flipbook").turn("page", 2);
+        }else{
+          $("#flipbook").turn("next");
+        }
+      }
+    });
+   
+    $('#flipbook').bind('turned', function(event, pageObject, corner){  // turning
+      if(!pagesRendered){
+        return;
+      }
+      let displaySingle = $('#flipbook').turn('display') == "single";
+      let totalPages = $('#flipbook').turn('pages');
+      if(displaySingle && pageObject == 1) {
+        // If going to front cover, go to last page instead.
+        event.preventDefault();
+        $('#flipbook').turn('stop');
+        $('#flipbook').turn('page', totalPages - 1);
+      }else if(displaySingle && pageObject == totalPages){
+        // If going to last page, go to front cover instead.
+        event.preventDefault();
+        $('#flipbook').turn('stop');
+        $('#flipbook').turn('page', 2);
+      }
+    });
+
+    $('#flipbook').bind('start',
+    function(event, pageObject, corner){
+      if(!pagesRendered){
+        return;
+      }
+      // Play page flip sound
+      document.getElementById("page-flip-sound").play();
+      let displayDouble = $('#flipbook').turn('display') == "double";
+      let totalPages = $('#flipbook').turn('pages');
+      if (displayDouble && pageObject.next == 1) {
+        // If going to front cover, go to last page instead.
+        event.preventDefault();
+        $('#flipbook').turn('page', totalPages - 1);//.turn('stop');
+      }else if(displayDouble && pageObject.next == totalPages){
+        // If going to last page, go to front cover.
+        event.preventDefault();
+        $('#flipbook').turn('page', 2);//.turn('stop');
+        //pageObject.next = 2;
+      }
+    });
+
+    /* ####################### IMPORT/EXPORT json journal ################################### */
+    // Save button
+    $(document).on("click", "#save", function() {
+        // Save the localStorage to a file on the users computer
+        var blob = new Blob([JSON.stringify(localStorage)], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, "5_minute_journal.txt");
+    });
+
+    // Import button
+    $(document).on("click", "#import", function() {
+        // Import the file to localStorage
+        var input = document.createElement('input');
+        input.type = 'file';
+        input.onchange = e => { 
+            var file = e.target.files[0]; 
+            var reader = new FileReader();
+            reader.readAsText(file,'UTF-8');
+            reader.onload = readerEvent => {
+                var content = readerEvent.target.result;
+                localStorage.clear();
+                var data = JSON.parse(content);
+                for (const [key, value] of Object.entries(data)) {
+                    localStorage.setItem(key, value);
+                }
+                renderJournal();
+            }
+        }
+        input.click();
+    });
+
+    // When resizing the window, re-render the journal if the window changes size over or under 600 px width
+    $(window).resize(function() {
+      var width = $(window).innerWidth();
+      // $("#example_day").turn('width', width);
+      if(width < 600){
+        $('#flipbook').turn('display', 'single');
+      }else{
+        $('#flipbook').turn('display', 'double');
+      }
+    });
+
+    
+    /* ####################### FUNCTIONS ################################### */
+    // Renders a single journal page.
+    function renderPage(date, pageData) {
+      let pageDiv = $('<div class="journal-page" id="date-' + date + '""></div>');
+
+      // --- Morning Section ---
+      let morningSection = $('<div class="morning"></div>');
+      // Date row with sun icon
+      let morningHeader = $('<div class="d-flex align-items-center flex-row-reverse"></div>')
+                      .append('<i class="bi bi-sun-fill sun"></i>');
+      morningSection.append(morningHeader);
+      morningSection.append('<h5 class="mb-0">' + date + '</h5>');
+
+      // Inspirational Quote
+      let quoteAndAuthor = getQuoteAndAuthorFromDate(date);
+      let quoteBlock = $('<blockquote class="mb-2"></blockquote>')
+                        .append('<p>"' + quoteAndAuthor[0] + '"</p>').append('<footer class="blockquote-footer">' + quoteAndAuthor[1] + '</footer>');
+      morningSection.append(quoteBlock);
+      var disabled = "disabled";
+      if(date == getCurentDate()){
+        disabled = "";
+      }
+      // "I am grateful for..."
+      morningSection.append('<h5>I am grateful for...</h5>');
+      pageData.gratefulFor.forEach((item, index) => {
+        let inputGroup = $('<div class="input-group"></div>')
+            .append('<input ' + disabled + ' id="' + date + 'grateful' + index + '" type="text" class="form-control" value="' + item + '" placeholder="' + (index + 1) + '...">');
+          morningSection.append(inputGroup);
+      });
+
+      // "What would make today great?"
+      morningSection.append('<h5>What would make today great?</h5>');
+      pageData.whatWouldMakeTodayGreat.forEach((item, index) => {
+        let inputGroup = $('<div class="input-group"></div>')
+            .append('<input ' + disabled + ' id="' + date + 'todayGreat' + index + '" type="text" class="form-control" value="' + item + '" placeholder="' + (index + 1) + '...">');
+          morningSection.append(inputGroup);
+      });
+
+      // "Daily affirmation" (2 rows)
+      morningSection.append('<h5>Daily affirmation</h5>');
+      let inputGroup = $('<div class="input-group"></div>')
+        .append('<textarea ' + disabled + ' type="text" class="form-control" placeholder="I am...">' + (pageData.dailyAffirmation || '') + '</textarea>');
+      morningSection.append(inputGroup);
+
+      // --- Evening Section ---
+      // If previous day, enable editing of night section, because some people might go to bed after 00.00
+      if(date == getPreviousDayDate()){
+        disabled = "";
+      }
+      let eveningSection = $('<div class="evening"></div>');
+      let eveningHeader = $('<div class="d-flex align-items-center flex-row-reverse" style="margin-bottom: -24px; margin-right: 10px;"></div>')
+                            .append('<i class="bi bi-moon-fill moon"></i>');
+      eveningSection.append(eveningHeader);
+
+      // "Highlights of the day" (3 items)
+      eveningSection.append('<h5>Highlights of the day</h5>');
+      pageData.highlightsOfDay.forEach((item, index) => {
+        let inputGroup = $('<div class="input-group"></div>')
+            .append('<input ' + disabled + ' id="' + date + 'highlight' + index + '" type="text" class="form-control" value="' + item + '" placeholder="' + (index + 1) + '...">');
+          eveningSection.append(inputGroup);
+        
+      });
+
+      // "What did I learn today" (2 items)
+      eveningSection.append('<h5>What did I learn today?</h5>');
+      inputGroup = $('<div class="input-group"></div>')
+      .append('<textarea ' + disabled + ' type="text" class="form-control" placeholder="Today I learned...">' + (pageData.whatDidILearn || '') + '</textarea>');
+      eveningSection.append(inputGroup);
+
+      // Append both sections to the page container
+      pageDiv.append(morningSection);
+      pageDiv.append(eveningSection);
+      return pageDiv;
+    }
+
+    // Main function that accepts a JSON object and renders all pages.
+    /*
+    Localstorage data structure (if date == current date, then it's tadays page):
+    {
+      "2025-03-01": { ... },
+      "2025-03-02": { ... },
+      "2025-03-03": { ... }
+    }
+    */
+
+    function getCurentDate(){
+      let today = new Date();
+      let dd = String(today.getDate()).padStart(2, '0');
+      let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+      let yyyy = today.getFullYear();
+      return yyyy + '-' + mm + '-' + dd;
+    }
+     
+    function getPreviousDayDate(){
+      let today = new Date();
+      let yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      let dd = String(yesterday.getDate()).padStart(2, '0');
+      let mm = String(yesterday.getMonth() + 1).padStart(2, '0'); //January is 0!
+      let yyyy = yesterday.getFullYear();
+      return yyyy + '-' + mm + '-' + dd;
+    }
+
+    function getTomorrowDate() {
+      let today = new Date();
+      let tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      let dd = String(tomorrow.getDate()).padStart(2, '0');
+      let mm = String(tomorrow.getMonth() + 1).padStart(2, '0'); //January is 0!
+      let yyyy = tomorrow.getFullYear();
+      return yyyy + '-' + mm + '-' + dd;
+    }
+
+    function renderJournal() {
+      // Set the flipbook options to full screen size height and width
+      // get the size of the screen and set the flipbook size
+      var width = $(window).innerWidth();
+      var height = $(window).innerHeight();
+      let display = 'double';
+      if(width < 600){
+        display = 'single';
+      }
+      $('#flipbook').turn({
+          width: width,
+          height: height,
+          autoCenter: true,
+          display: display, //'single', // double
+      });
+
+      // Create an array of pages so we can sort it by date
+      let pages = [];
+      for (const [key, value] of Object.entries(localStorage)) {
+        pages.push({ date: key, data: value });
+      }
+      // Sort the pages by date
+      pages.sort((a, b) => (a.date > b.date) ? 1 : -1);
+
+      let htmlPages = [];
+      let emptyPageData = {
+        "gratefulFor": ["", "", ""],
+        "whatWouldMakeTodayGreat": ["", "", ""],
+        "dailyAffirmation": "",
+        "highlightsOfDay": ["", "", ""],
+        "whatDidILearn": ""
+      };
+
+      // Get the pages from locastorage
+      let printedTodaysDate = false;
+      let printedYesterdaysDate = false;
+      let currentDate = getCurentDate();
+      let previousDayDate = getPreviousDayDate();
+      for (let i = 0; i < pages.length; i++) {
+        // Get current date from javascript
+        if(pages[i].date == currentDate){
+          // Print yesterdays date if current date is included and yesterday is not printed yet.
+          if(!printedYesterdaysDate){
+            htmlPages.push(renderPage(previousDayDate, emptyPageData));
+            printedYesterdaysDate = true;
+          }
+          printedTodaysDate = true;
+        }
+        if(pages[i].date == previousDayDate){
+          printedYesterdaysDate = true;
+        }
+        // Print the page
+        htmlPages.push(renderPage(pages[i].date, JSON.parse(pages[i].data)));
+      }
+      // Print empty pages for yesterday and today and tomorrow if not printed already
+      if(htmlPages.length > 0){
+        if(!printedYesterdaysDate){
+          htmlPages.push(renderPage(previousDayDate, emptyPageData));
+        }
+      }
+      if(!printedTodaysDate){
+        htmlPages.push(renderPage(currentDate, emptyPageData));
+      }
+
+      // If total even pages, add tomorrows date page at end
+      if(htmlPages.length % 2 == 0){
+        htmlPages.push(renderPage(getTomorrowDate(), emptyPageData));
+      }
+
+      // Add a last page same as the info page, should never be seen, but sometimes happen because of the turn.js bug.
+      htmlPages.push($("#info_page").clone());
+
+      // Render the pages
+      var i = 3;
+      htmlPages.forEach(page => {
+        $("#flipbook").turn("addPage", page, i);
+        i ++;
+      });
+
+      // Print amount of pages
+      $("#pages_amount").text(htmlPages.length);
+
+      // print example page
+      $("#example_day").html(renderPage("1337-04-20", examplePage));
+    }
+    
+    // Function to save a blob to a file
+    function saveAs(blob, fileName) {
+        var url = window.URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = fileName;
+        a.click();
+    }
+
+    // Get the json data from a specific page element with the specific date specified
+    function getJsonFromPage(date){
+        let pageElement = $("#date-" + date);
+        if(pageElement.length == 0){
+            return null;
+        }
+        return {
+            "gratefulFor": [$("#" + date + "grateful0").val(), $("#" + date + "grateful1").val(), $("#" + date + "grateful2").val()],
+            "whatWouldMakeTodayGreat": [$("#" + date + "todayGreat0").val(), $("#" + date + "todayGreat1").val(), $("#" + date + "todayGreat2").val()],
+            "dailyAffirmation": pageElement.find("h5:contains('Daily affirmation') + div textarea").val(),
+            "highlightsOfDay": [$("#" + date + "highlight0").val(), $("#" + date + "highlight1").val(), $("#" + date + "highlight2").val()],
+            "whatDidILearn": pageElement.find("h5:contains('What did I learn today?') + div textarea").val()
+        }
+    }
+
+    // Get the quote and author from the list, selected by date
+    function getQuoteAndAuthorFromDate(date){
+      // Split date into year, month and day numbers
+      let dateNumbers = date.split("-").map(Number);
+      // Sum all list numbers into a integer
+      let sum = dateNumbers.reduce((a, b) => a + b, 0);
+      // Pick a quote and author from the list depending on the sum of the date numbers
+      let index = sum % quoteAndAuthorList.length;
+      return quoteAndAuthorList[index];
+    }
+
+    const examplePage = 
+        {
+          "gratefulFor": ["Family", "Health", "Opportunities"],
+          "whatWouldMakeTodayGreat": ["Smile", "Take a walk", "Drink water"],
+          "dailyAffirmation": "I am strong\nI improve every day",
+          "highlightsOfDay": ["Finished a project", "Had a good meal", "Met a friend"],
+          "whatDidILearn": "I learned how to use this awesome journal to boost my mood, be happier and level up my life."
+        };
+
+    const quoteAndAuthorList = [
+      ["The only limit to our realization of tomorrow is our doubts of today.", "Brian Tracy"],
+      ["Every day is a new beginning.", "Mohamed"],
+      ["Believe you can and you're halfway there.", "Theodore Roosevelt"],
+      ["The future belongs to those who believe in the beauty of their dreams.", "Eleanor Roosevelt"],
+      ["Do not watch the clock. Do what it does. Keep going.", "Sam Levenson"],
+      ["Keep your face always toward the sunshine—and shadows will fall behind you.", "Walt Whitman"],
+      ["It does not matter how slowly you go as long as you do not stop.", "Confucius"],
+      ["Success is not final, failure is not fatal: it is the courage to continue that counts.", "Winston Churchill"],
+      ["Hardships often prepare ordinary people for an extraordinary destiny.", "C.S. Lewis"],
+      ["The best way to predict your future is to create it.", "Peter Drucker"],
+      ["You are never too old to set another goal or to dream a new dream.", "C.S. Lewis"],
+      ["Act as if what you do makes a difference. It does.", "William James"],
+      ["Believe in yourself and all that you are. Know that there is something inside you that is greater than any obstacle.", "Christian D. Larson"],
+      ["The only way to do great work is to love what you do.", "Steve Jobs"],
+      ["If opportunity doesn't knock, build a door.", "Milton Berle"],
+      ["Dream big and dare to fail.", "Norman Vaughan"],
+      ["Everything you can imagine is real.", "Pablo Picasso"],
+      ["Turn your wounds into wisdom.", "Oprah Winfrey"],
+      ["What lies behind us and what lies before us are tiny matters compared to what lies within us.", "Ralph Waldo Emerson"],
+      ["Keep your eyes on the stars, and your feet on the ground.", "Theodore Roosevelt"],
+      ["Success usually comes to those who are too busy to be looking for it.", "Henry David Thoreau"],
+      ["Don't be pushed around by the fears in your mind. Be led by the dreams in your heart.", "Roy T. Bennett"],
+      ["I attribute my success to this: I never gave or took any excuse.", "Florence Nightingale"],
+      ["The harder you work for something, the greater you'll feel when you achieve it.", "Ava Carter"],
+      ["Dream it. Wish it. Do it.", "Ethan Reynolds"],
+      ["Success is not how high you have climbed, but how you make a positive difference to the world.", "Roy T. Bennett"],
+      ["Your passion is waiting for your courage to catch up.", "Isabelle Lafleche"],
+      ["Magic is believing in yourself, if you can do that, you can make anything happen.", "Johann Wolfgang von Goethe"],
+      ["Great things never come from comfort zones.", "Neil Strauss"],
+      ["Don’t stop when you’re tired. Stop when you’re done.", "Marilyn Monroe"],
+      ["Wake up with determination. Go to bed with satisfaction.", "Logan Brooks"],
+      ["Little by little, a little becomes a lot.", "Tanzanian Proverb"],
+      ["The secret of getting ahead is getting started.", "Mark Twain"],
+      ["You don’t have to be great to start, but you have to start to be great.", "Zig Ziglar"],
+      ["The pain you feel today will be the strength you feel tomorrow.", "Gabriel Ortiz"],
+      ["Sometimes we're tested not to show our weaknesses, but to discover our strengths.", "Lila Maxwell"],
+      ["Don’t wait for opportunity. Create it.", "Nathaniel Cruz"],
+      ["Dream it, believe it, build it.", "Marcus Wells"],
+      ["The way to get started is to quit talking and begin doing.", "Walt Disney"],
+      ["It always seems impossible until it's done.", "Nelson Mandela"],
+      ["The best revenge is massive success.", "Frank Sinatra"],
+      ["Keep going. Be all in.", "Bryan Hutchinson"],
+      ["Don’t limit your challenges. Challenge your limits.", "Samantha Reid"],
+      ["You are capable of amazing things.", "Sophia Grant"],
+      ["Push yourself, because no one else is going to do it for you.", "Dylan Matthews"],
+      ["Sometimes later becomes never. Do it now.", "Olivia Price"],
+      ["Do something today that your future self will thank you for.", "Evelyn Brooks"],
+      ["Little things make big days.", "Jordan Clarke"],
+      ["It's going to be hard, but hard does not mean impossible.", "Mason Bell"],
+      ["Don’t wait. The time will never be just right.", "Napoleon Hill"],
+      ["If you want to fly, give up everything that weighs you down.", "Buddha"],
+      ["The best time to plant a tree was 20 years ago. The second best time is now.", "Chinese Proverb"],
+      ["Your life does not get better by chance, it gets better by change.", "Jim Rohn"],
+      ["The only way to achieve the impossible is to believe it is possible.", "Charles Kingsleigh"],
+      ["Don't stop until you're proud.", "Aiden Reed"],
+      ["You don't have to see the whole staircase, just take the first step.", "Martin Luther King Jr."],
+      ["The struggle you're in today is developing the strength you need for tomorrow.", "Robert Tew"],
+      ["Be so good they can’t ignore you.", "Steve Martin"],
+      ["Everything you’ve ever wanted is on the other side of fear.", "George Addair"],
+      ["Opportunities don't happen, you create them.", "Chris Grosser"],
+      ["It’s not whether you get knocked down, it’s whether you get up.", "Vince Lombardi"],
+      ["If you can dream it, you can do it.", "Walt Disney"],
+      ["The only person you should try to be better than is the person you were yesterday.", "Matty Mullens"],
+      ["Success is walking from failure to failure with no loss of enthusiasm.", "Winston Churchill"],
+      ["The future depends on what you do today.", "Mahatma Gandhi"],
+      ["Don't count the days, make the days count.", "Muhammad Ali"],
+      ["If you want to achieve greatness stop asking for permission.", "Alexandra Moore"],
+      ["Everything has beauty, but not everyone can see.", "Confucius"],
+      ["We generate fears while we sit. We overcome them by action.", "Dr. Henry Link"],
+      ["The only thing standing between you and your goal is the bullshit story you keep telling yourself.", "Jordan Belfort"],
+      ["You miss 100% of the shots you don't take.", "Wayne Gretzky"],
+      ["A year from now you may wish you had started today.", "Karen Lamb"],
+      ["The mind is everything. What you think you become.", "Buddha"],
+      ["An obstacle is often a stepping stone.", "Prescott Bush"],
+      ["Failure will never overtake me if my determination to succeed is strong enough.", "Og Mandino"],
+      ["Don't let yesterday take up too much of today.", "Will Rogers"],
+      ["I find that the harder I work, the more luck I seem to have.", "Thomas Jefferson"],
+      ["Success is not in what you have, but who you are.", "Bo Bennett"],
+      ["I never dreamed about success, I worked for it.", "Estee Lauder"],
+      ["Ambition is the path to success. Persistence is the vehicle you arrive in.", "Bill Bradley"],
+      ["The difference between ordinary and extraordinary is that little extra.", "Jimmy Johnson"],
+      ["Action is the foundational key to all success.", "Pablo Picasso"],
+      ["Your time is limited, so don't waste it living someone else's life.", "Steve Jobs"],
+      ["Don't be afraid to give up the good to go for the great.", "John D. Rockefeller"],
+      ["If you really look closely, most overnight successes took a long time.", "Steve Jobs"],
+      ["I wake up every morning and think, 'how far can I push this company in the next 24 hours.'", "Leah Busque"],
+      ["There is no substitute for hard work.", "Thomas Edison"],
+      ["Perseverance is failing 19 times and succeeding the 20th.", "Julie Andrews"],
+      ["Don't wish it were easier, wish you were better.", "Jim Rohn"],
+      ["The successful warrior is the average man, with laser-like focus.", "Bruce Lee"],
+      ["Everything you do is a reflection of yourself.", "Caroline Foster"],
+      ["The secret of success is to do the common thing uncommonly well.", "John D. Rockefeller"],
+      ["The only place where success comes before work is in the dictionary.", "Vidal Sassoon"],
+      ["Doubt kills more dreams than failure ever will.", "Suzy Kassem"],
+      ["In the middle of every difficulty lies opportunity.", "Albert Einstein"],
+      ["Start where you are. Use what you have. Do what you can.", "Arthur Ashe"],
+      ["Life is 10% what happens to us and 90% how we react to it.", "Charles R. Swindoll"],
+      ["Happiness is not something ready made. It comes from your own actions.", "Dalai Lama"],
+      ["If you can’t fly then run, if you can’t run then walk, if you can’t walk then crawl, but whatever you do you have to keep moving forward.", "Martin Luther King Jr."],
+      ["The journey of a thousand miles begins with one step.", "Lao Tzu"]
+    ];
+  </script>
+</body>
+</html>
