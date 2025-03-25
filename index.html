@@ -171,28 +171,6 @@
         }
       }
     });
-    /*
-    $('#flipbook').bind('turned', function(event, pageObject, corner){  // turning
-      if(!pagesRendered){
-        return;
-      }
-      let displaySingle = $('#flipbook').turn('display') == "single";
-      let totalPages = $('#flipbook').turn('pages');
-      if(displaySingle && pageObject == 1) {
-        // If going to front cover, go to last page instead.
-        event.preventDefault();
-        $('#flipbook').turn('stop');
-        $('#flipbook').turn('page', totalPages - 1);
-        console.log("Turned1");
-      }else if(displaySingle && pageObject == totalPages){
-        // If going to last page, go to front cover instead.
-        event.preventDefault();
-        $('#flipbook').turn('stop');
-        $('#flipbook').turn('page', 2);
-        console.log("Turned2");
-      }
-    });
-    */
     
 
     $('#flipbook').bind('start', function(event, pageObject, corner){
@@ -201,22 +179,6 @@
       }
       // Play page flip sound
       document.getElementById("page-flip-sound").play();
-      /*
-      let displayDouble = $('#flipbook').turn('display') == "double";
-      let totalPages = $('#flipbook').turn('pages');
-      if (displayDouble && pageObject.next == 1) {
-        // If going to front cover, go to last page instead.
-        event.preventDefault();
-        $('#flipbook').turn('page', totalPages - 1);//.turn('stop');
-        console.log("start1");
-      }else if(displayDouble && pageObject.next == totalPages){
-        // If going to last page, go to front cover.
-        event.preventDefault();
-        $('#flipbook').turn('page', 2);//.turn('stop');
-        //pageObject.next = 2;
-        console.log("start2");
-      }
-        */
     });
 
     $('#flipbook').on('touchstart mousedown', function(e) {
@@ -309,16 +271,13 @@
       let nextPage = $('#flipbook').turn('page');
       let totalPages = $('#flipbook').turn('pages');
       if (corner === "right") {
-        // console.log("Right corner");
         nextPage += 1;
         if (displayDouble && (nextPage == totalPages || nextPage + 1 == totalPages)) {
           // If going to last page, go to front cover.
           // event.preventDefault();
           $('#flipbook').turn('page', 2).turn('stop');
-          // console.log("Turning to front cover DOUBLE sided");
         }else if(!displayDouble && (nextPage == totalPages || nextPage == totalPages + 1)){
           $('#flipbook').turn('page', 2).turn('stop');
-          // console.log("Turning to front cover");
         }else {
           $('#flipbook').turn('next').turn('stop');
         }
@@ -328,15 +287,12 @@
         if (displayDouble && (nextPage == 1 || nextPage == 2)) {
           // If going to front cover, go to last page instead.
           $('#flipbook').turn('page', totalPages - 1).turn('stop');
-          // console.log("Turning to last page DOUBLE sided");
         } else if (!displayDouble && (nextPage == 1 || nextPage == 0)){
           $('#flipbook').turn('page', totalPages - 1).turn('stop');
-          // console.log("Turning to last page");
         } else {
           $('#flipbook').turn('previous').turn('stop');
         }
       }
-      console.log("Next Page: " + nextPage);
     });
 
     /* ####################### IMPORT/EXPORT json journal ################################### */
