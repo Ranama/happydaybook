@@ -158,12 +158,14 @@
       let page = $('#flipbook').turn('page');
       let displaySingle = $('#flipbook').turn('display') == "single";
       if (e.keyCode == 37) {
+        playPageFlipSound();
         if((displaySingle && page == 2) || (!displaySingle && (page == 2 || page == 3))){
           $("#flipbook").turn("page", pages - 1);
         }else{
           $("#flipbook").turn("previous");
         }
       } else if (e.keyCode == 39) {
+        playPageFlipSound();
         if((displaySingle && page == pages - 1) || (!displaySingle && (page == pages - 1 ||  page== pages - 2))){
           $("#flipbook").turn("page", 2);
         }else{
@@ -171,15 +173,14 @@
         }
       }
     });
-    
 
-    $('#flipbook').bind('start', function(event, pageObject, corner){
+    function playPageFlipSound() {
       if(!pagesRendered){
         return;
       }
       // Play page flip sound
       document.getElementById("page-flip-sound").play();
-    });
+    }
 
     $('#flipbook').on('touchstart mousedown', function(e) {
       var rect = this.getBoundingClientRect();
@@ -218,9 +219,12 @@
     });
 
     $('#flipbook').on('touchmove', function(e) {
+      /*
+      // Better to not have this, it makes the page seem bugged when scrolling at edge.
       if ($(this).data('isEdge')) {
         return;
       }
+        */
 
       // Determine movement from start.
       var startX = $(this).data('startX');
@@ -271,6 +275,7 @@
       let nextPage = $('#flipbook').turn('page');
       let totalPages = $('#flipbook').turn('pages');
       if (corner === "right") {
+        playPageFlipSound();
         nextPage += 1;
         if (displayDouble && (nextPage == totalPages || nextPage + 1 == totalPages)) {
           // If going to last page, go to front cover.
@@ -283,6 +288,7 @@
         }
       } else if (corner === "left") {
         // console.log("Left corner");
+        playPageFlipSound();
         nextPage -= 1;
         if (displayDouble && (nextPage == 1 || nextPage == 2)) {
           // If going to front cover, go to last page instead.
@@ -323,6 +329,9 @@
             }
         }
         input.click();
+
+        // reload page
+        location.reload();
     });
 
     // When resizing the window, re-render the journal if the window changes size over or under 600 px width
