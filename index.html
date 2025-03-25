@@ -215,28 +215,59 @@
       }
     });
 
-    $('#flipbook').on('touchstart mousedown', function(e){
-      // Get the bounding rectangle of the flipbook
+    $('#flipbook').on('touchstart mousedown', function(e) {
       var rect = this.getBoundingClientRect();
-      var x;
-      if(e.type === 'touchstart'){
-        // Use clientX from the first touch point for touch events
-        x = e.originalEvent.touches[0].clientX - rect.left;
+      var startX, startY;
+      
+      if (e.type === 'touchstart') {
+        startX = e.originalEvent.touches[0].clientX;
+        startY = e.originalEvent.touches[0].clientY;
       } else {
-        x = e.pageX - rect.left;
+        startX = e.pageX;
+        startY = e.pageY;
       }
-      var corner = (x < rect.width / 2) ? "left" : "right";
+      
+      // Determine which side (corner) the user touched relative to the flipbook.
+      var xRelative = startX - rect.left;
+      var corner = (xRelative < rect.width / 2) ? "left" : "right";
+      
       $(this).data('startCorner', corner);
+      $(this).data('startX', startX);
+      $(this).data('startY', startY);
     });
 
-    $('#flipbook').on('touchend mouseup', function(e){
+    $('#flipbook').on('touchend mouseup', function(e) {
+      var threshold = 10; // pixels - adjust if needed
+      var startX = $(this).data('startX');
+      var startY = $(this).data('startY');
+      var endX, endY;
+      
+      if (e.type === 'touchend') {
+        if (e.originalEvent.changedTouches.length) {
+          endX = e.originalEvent.changedTouches[0].clientX;
+          endY = e.originalEvent.changedTouches[0].clientY;
+        }
+      } else {
+        endX = e.pageX;
+        endY = e.pageY;
+      }
+      
+      // Calculate the movement distance
+      var dx = Math.abs(endX - startX);
+      var dy = Math.abs(endY - startY);
+      
+      // Only trigger if the movement exceeds the threshold
+      if (dx < threshold && dy < threshold) {
+        return; // Do nothing if the user just tapped without moving significantly.
+      }
+      
       var corner = $(this).data('startCorner');
-      let displaySingle = $('#flipbook').turn('display') == "single";
-      if(displaySingle){
-        // If single page view and touch, we need to turn the page directly, since it's impossible to drag the corner long enough to switch page.
-        if(corner == "right"){
+      let displaySingle = $('#flipbook').turn('display') === "single";
+      
+      if (displaySingle) {
+        if (corner === "right") {
           $('#flipbook').turn('next');
-        }else if(corner == "left"){
+        } else if (corner === "left") {
           $('#flipbook').turn('previous');
         }
       }
