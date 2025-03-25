@@ -41,9 +41,6 @@
       padding:10px;
       padding-bottom: 0;
     }
-    .hard {
-      background-color: #fff9e8;
-    }
     
     /* Spacing for Bootstrap input groups */
     .input-group {
@@ -81,8 +78,8 @@
   <!-- Audio element for the page-flip sound -->
   <audio id="page-flip-sound" src="turnpage-99756.mp3"></audio>
     <div id="flipbook">
-        <div class="hard journal-page"> <h1>Loading...</h1></div>
-        <div id="info_page" class="hard journal-page">
+        <div class="journal-page morning"> <h1>Loading...</h1></div>
+        <div id="info_page" class="journal-page morning">
             <div class="row justify-content-center">
                 <div class="col-8">
                     <h3>How to use?</h3>
@@ -174,7 +171,7 @@
         }
       }
     });
-   
+    /*
     $('#flipbook').bind('turned', function(event, pageObject, corner){  // turning
       if(!pagesRendered){
         return;
@@ -186,13 +183,17 @@
         event.preventDefault();
         $('#flipbook').turn('stop');
         $('#flipbook').turn('page', totalPages - 1);
+        console.log("Turned1");
       }else if(displaySingle && pageObject == totalPages){
         // If going to last page, go to front cover instead.
         event.preventDefault();
         $('#flipbook').turn('stop');
         $('#flipbook').turn('page', 2);
+        console.log("Turned2");
       }
     });
+    */
+    
 
     $('#flipbook').bind('start', function(event, pageObject, corner){
       if(!pagesRendered){
@@ -200,19 +201,22 @@
       }
       // Play page flip sound
       document.getElementById("page-flip-sound").play();
+      /*
       let displayDouble = $('#flipbook').turn('display') == "double";
-      
       let totalPages = $('#flipbook').turn('pages');
       if (displayDouble && pageObject.next == 1) {
         // If going to front cover, go to last page instead.
         event.preventDefault();
         $('#flipbook').turn('page', totalPages - 1);//.turn('stop');
+        console.log("start1");
       }else if(displayDouble && pageObject.next == totalPages){
         // If going to last page, go to front cover.
         event.preventDefault();
         $('#flipbook').turn('page', 2);//.turn('stop');
         //pageObject.next = 2;
+        console.log("start2");
       }
+        */
     });
 
     $('#flipbook').on('touchstart mousedown', function(e) {
@@ -227,17 +231,56 @@
         startY = e.pageY;
       }
       
-      // Determine which side (corner) the user touched relative to the flipbook.
+      // Determine which side the user touched relative to the flipbook.
       var xRelative = startX - rect.left;
       var corner = (xRelative < rect.width / 2) ? "left" : "right";
+
+      // Check if the starting position is near any edge of the viewport.
+      var viewportWidth = window.innerWidth;
+      var viewportHeight = window.innerHeight;
+      var isEdge = false;
+      // If within 10% of any side of the viewport.
+      if (startX < viewportWidth * 0.1 ||
+          startX > viewportWidth * 0.9 ||
+          startY < viewportHeight * 0.1 ||
+          startY > viewportHeight * 0.9) {
+        isEdge = true;
+      }
       
+      // Store the start values and initialize the scrolling flag.
       $(this).data('startCorner', corner);
       $(this).data('startX', startX);
       $(this).data('startY', startY);
+      $(this).data('isScrolling', false);
+      $(this).data('isEdge', isEdge);
+    });
+
+    $('#flipbook').on('touchmove', function(e) {
+      if ($(this).data('isEdge')) {
+        return;
+      }
+
+      // Determine movement from start.
+      var startX = $(this).data('startX');
+      var startY = $(this).data('startY');
+      var currentX, currentY;
+      
+      if (e.type === 'touchmove') {
+        currentX = e.originalEvent.touches[0].clientX;
+        currentY = e.originalEvent.touches[0].clientY;
+      }
+      
+      var dx = Math.abs(currentX - startX);
+      var dy = Math.abs(currentY - startY);
+      
+      // If vertical movement is significantly larger than horizontal, consider it a scroll.
+      if (dy > dx * 2) {
+        $(this).data('isScrolling', true);
+      }
     });
 
     $('#flipbook').on('touchend mouseup', function(e) {
-      var threshold = 10; // pixels - adjust if needed
+      var threshold = 10; // Minimal movement threshold in pixels
       var startX = $(this).data('startX');
       var startY = $(this).data('startY');
       var endX, endY;
@@ -252,25 +295,48 @@
         endY = e.pageY;
       }
       
-      // Calculate the movement distance
       var dx = Math.abs(endX - startX);
       var dy = Math.abs(endY - startY);
       
-      // Only trigger if the movement exceeds the threshold
-      if (dx < threshold && dy < threshold) {
-        return; // Do nothing if the user just tapped without moving significantly.
+      // If movement is minimal or it was determined to be a scroll, do nothing.
+      if ((dx < threshold && dy < threshold) || $(this).data('isScrolling')) {
+        return;
       }
       
+      // Otherwise, use the starting corner to decide which page to turn.
+      let displayDouble = $('#flipbook').turn('display') == "double";
       var corner = $(this).data('startCorner');
-      //let displaySingle = $('#flipbook').turn('display') === "single";
-      
-      //if (displaySingle) {
-        if (corner === "right") {
-          $('#flipbook').turn('next');
-        } else if (corner === "left") {
-          $('#flipbook').turn('previous');
+      let nextPage = $('#flipbook').turn('page');
+      let totalPages = $('#flipbook').turn('pages');
+      if (corner === "right") {
+        // console.log("Right corner");
+        nextPage += 1;
+        if (displayDouble && (nextPage == totalPages || nextPage + 1 == totalPages)) {
+          // If going to last page, go to front cover.
+          // event.preventDefault();
+          $('#flipbook').turn('page', 2).turn('stop');
+          // console.log("Turning to front cover DOUBLE sided");
+        }else if(!displayDouble && (nextPage == totalPages || nextPage == totalPages + 1)){
+          $('#flipbook').turn('page', 2).turn('stop');
+          // console.log("Turning to front cover");
+        }else {
+          $('#flipbook').turn('next').turn('stop');
         }
-      //}
+      } else if (corner === "left") {
+        // console.log("Left corner");
+        nextPage -= 1;
+        if (displayDouble && (nextPage == 1 || nextPage == 2)) {
+          // If going to front cover, go to last page instead.
+          $('#flipbook').turn('page', totalPages - 1).turn('stop');
+          // console.log("Turning to last page DOUBLE sided");
+        } else if (!displayDouble && (nextPage == 1 || nextPage == 0)){
+          $('#flipbook').turn('page', totalPages - 1).turn('stop');
+          // console.log("Turning to last page");
+        } else {
+          $('#flipbook').turn('previous').turn('stop');
+        }
+      }
+      console.log("Next Page: " + nextPage);
     });
 
     /* ####################### IMPORT/EXPORT json journal ################################### */
