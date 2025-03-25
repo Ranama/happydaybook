@@ -262,15 +262,15 @@
       }
       
       var corner = $(this).data('startCorner');
-      let displaySingle = $('#flipbook').turn('display') === "single";
+      //let displaySingle = $('#flipbook').turn('display') === "single";
       
-      if (displaySingle) {
+      //if (displaySingle) {
         if (corner === "right") {
           $('#flipbook').turn('next');
         } else if (corner === "left") {
           $('#flipbook').turn('previous');
         }
-      }
+      //}
     });
 
     /* ####################### IMPORT/EXPORT json journal ################################### */
