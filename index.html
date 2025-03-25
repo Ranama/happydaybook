@@ -138,6 +138,9 @@
 
       // Turn to the last page 
 	    $('#flipbook').turn('page', $('#flipbook').turn('pages') - 1);
+
+      // Peel the Corner to the left
+      // $('#flipbook').turn('peel', 50);  // dont work since it needs the version 4
       
       pagesRendered = true;
     });
@@ -191,14 +194,14 @@
       }
     });
 
-    $('#flipbook').bind('start',
-    function(event, pageObject, corner){
+    $('#flipbook').bind('start', function(event, pageObject, corner){
       if(!pagesRendered){
         return;
       }
       // Play page flip sound
       document.getElementById("page-flip-sound").play();
       let displayDouble = $('#flipbook').turn('display') == "double";
+      
       let totalPages = $('#flipbook').turn('pages');
       if (displayDouble && pageObject.next == 1) {
         // If going to front cover, go to last page instead.
@@ -209,6 +212,33 @@
         event.preventDefault();
         $('#flipbook').turn('page', 2);//.turn('stop');
         //pageObject.next = 2;
+      }
+    });
+
+    $('#flipbook').on('touchstart mousedown', function(e){
+      // Get the bounding rectangle of the flipbook
+      var rect = this.getBoundingClientRect();
+      var x;
+      if(e.type === 'touchstart'){
+        // Use clientX from the first touch point for touch events
+        x = e.originalEvent.touches[0].clientX - rect.left;
+      } else {
+        x = e.pageX - rect.left;
+      }
+      var corner = (x < rect.width / 2) ? "left" : "right";
+      $(this).data('startCorner', corner);
+    });
+
+    $('#flipbook').on('touchend mouseup', function(e){
+      var corner = $(this).data('startCorner');
+      let displaySingle = $('#flipbook').turn('display') == "single";
+      if(displaySingle){
+        // If single page view and touch, we need to turn the page directly, since it's impossible to drag the corner long enough to switch page.
+        if(corner == "right"){
+          $('#flipbook').turn('next');
+        }else if(corner == "left"){
+          $('#flipbook').turn('previous');
+        }
       }
     });
 
