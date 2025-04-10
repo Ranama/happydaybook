@@ -95,6 +95,7 @@
                       <b>Pages: <span id="pages_amount">1337</span></b> Navigate by pulling corners <i class="bi bi-file-earmark-text"></i> <i class="bi bi-sticky"></i> or use <span class="bi bi-arrow-left-square"></span> / <span class="bi bi-arrow-right-square"></span> arrow keys.
                       <button id="save" class = "btn btn-sm btn-success"><i class="bi bi-cloud-download"></i> Save</button>
                       <button id="import" class = "btn btn-sm btn-primary"><i class="bi bi-cloud-upload"></i> Import</button>
+                      <button id="change-language" class="btn btn-sm btn-primary p-0"><img src="img/sweflag.png" alt="Swedish"></button>
                     </p>
                   </div>
                 <div class="col-10">
@@ -131,6 +132,11 @@
     pagesRendered = false;
     // Render the journal on document ready using the sample data.
     $(document).ready(function () {
+      // Check language, if swedish, redirect to swedish page
+      if(localStorage.getItem("language") == "swe"){
+        window.location.href = "sv/index.html";
+      }
+
       renderJournal();
 
       // Turn to the last page 
@@ -303,6 +309,12 @@
     });
 
     /* ####################### IMPORT/EXPORT json journal ################################### */
+    // Change language button
+    $(document).on("click", "#change-language", function() {
+        // Change the language of the page
+        localStorage.setItem("language", "swe");
+        location.reload();
+    });
     // Save button
     $(document).on("click", "#save", function() {
         // Save the localStorage to a file on the users computer
@@ -479,6 +491,9 @@
       // Create an array of pages so we can sort it by date
       let pages = [];
       for (const [key, value] of Object.entries(localStorage)) {
+        if(key == "language"){
+          continue;
+        }
         pages.push({ date: key, data: value });
       }
       // Sort the pages by date

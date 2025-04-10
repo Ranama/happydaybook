@@ -92,7 +92,7 @@
                       <b>Sidor: <span id="pages_amount">1337</span></b> Navigera genom att dra i hörnen <i class="bi bi-file-earmark-text"></i> <i class="bi bi-sticky"></i> eller använd <span class="bi bi-arrow-left-square"></span> / <span class="bi bi-arrow-right-square"></span> piltangenter.
                       <button id="save" class="btn btn-sm btn-success"><i class="bi bi-cloud-download"></i> Spara</button>
                       <button id="import" class="btn btn-sm btn-primary"><i class="bi bi-cloud-upload"></i> Importera</button>
-                      <button id="engflag" class="btn btn-sm btn-primary p-0"><img src="../img/engflag.png" alt="english"></button>
+                      <button id="change-language" class="btn btn-sm btn-primary p-0"><img src="../img/engflag.png" alt="english"></button>
                     </p>
                   </div>
                 <div class="col-10">
@@ -127,6 +127,11 @@
     /* ####################### Ladda dagboken ################################### */
     pagesRendered = false;
     $(document).ready(function () {
+      // Check language, if swedish, redirect to swedish page
+      if(localStorage.getItem("language") != "swe"){
+        window.location.href = "../index.html";
+      }
+
       renderJournal();
       // Vänd till sista sidan 
 	    $('#flipbook').turn('page', $('#flipbook').turn('pages') - 1);
@@ -271,6 +276,12 @@
     });
 
     /* ####################### IMPORT/EXPORT JSON-dagboken ################################### */
+    $(document).on("click", "#change-language", function() {
+        // Change the language of the page
+        localStorage.setItem("language", "eng");
+        location.reload();
+    });
+
     $(document).on("click", "#save", function() {
         var blob = new Blob([JSON.stringify(localStorage)], {type: "text/plain;charset=utf-8"});
         saveAs(blob, "5_minute_journal.txt");
@@ -404,6 +415,9 @@
       });
       let pages = [];
       for (const [key, value] of Object.entries(localStorage)) {
+        if(key == "language"){
+          continue;
+        }
         pages.push({ date: key, data: value });
       }
       pages.sort((a, b) => (a.date > b.date) ? 1 : -1);
