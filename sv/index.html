@@ -118,7 +118,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="jsonModalLabel">Export / Import Journal Data</h5>
+        <h5 class="modal-title" id="jsonModalLabel">Exportera / Importera Journal Data</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -126,11 +126,11 @@
       </div>
       <div class="modal-footer">
         <!-- New "Select File" button -->
-        <button type="button" class="btn btn-warning" id="selectFile">Select File</button>
-        <button type="button" class="btn btn-primary" id="saveToFile">Save to File</button>
-        <button type="button" class="btn btn-success" id="importData">Import</button>
-        <button type="button" class="btn btn-secondary" id="copyToClipboard">Copy to Clipboard</button>
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-warning" id="selectFile">Välj fil</button>
+        <button type="button" class="btn btn-primary" id="saveToFile">Spara till fil</button>
+        <button type="button" class="btn btn-success" id="importData">Importera</button>
+        <button type="button" class="btn btn-secondary" id="copyToClipboard">Kopiera data</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Stäng</button>
       </div>
     </div>
   </div>
@@ -334,7 +334,7 @@ $(document).on("click", "#save", function() {
   $("#saveToFile").show();
   $("#importData").hide();
   $("#copyToClipboard").show();
-  $("#jsonData").attr("placeholder", "Your journal data in JSON format will appear here...");
+  $("#jsonData").attr("placeholder", "Din data in JSON format kommer skrivas ut här...");
 });
 
 // When the main "Import" button is clicked, open the modal with an empty textarea.
@@ -348,7 +348,7 @@ $(document).on("click", "#import", function() {
   $("#saveToFile").hide();
   $("#importData").show();
   $("#copyToClipboard").hide();
-  $("#jsonData").attr("placeholder", "Paste your JSON data here...");
+  $("#jsonData").attr("placeholder", "Klistra in din json data här...");
 });
 
 // "Select File" button: Open a file picker and paste file contents into the textarea.
