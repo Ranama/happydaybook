@@ -409,17 +409,19 @@ $(document).on("click", "#selectFile", function() {
   input.click();
 });
 
-// "Save to File" button: Download the JSON contents to a file.
+// "Save to File" button: Initiate a download of the JSON document.
 $(document).on("click", "#saveToFile", function() {
   var data = $("#jsonData").val();
-  var blob = new Blob([data], { type: "text/plain;charset=utf-8" });
+  // Prepend UTF-8 BOM to ensure the file is interpreted as UTF-8.
+  var blob = new Blob(["\uFEFF" + data], { type: "text/plain;charset=utf-8" });
   var url = window.URL.createObjectURL(blob);
   var a = document.createElement("a");
   a.href = url;
-  a.download = "HappyDayBook.json";
+  a.download = "journal_data.json";
   a.click();
   window.URL.revokeObjectURL(url);
 });
+
 
 // "Copy to Clipboard" button: Copy the JSON contents from the textarea.
 $(document).on("click", "#copyToClipboard", function(){
