@@ -112,6 +112,30 @@
             <div id="example_day"></div>
         </div>
     </div>
+    <!-- Modal for Export/Import Journal Data -->
+<!-- Modal for Export/Import Journal Data -->
+<div class="modal fade" id="jsonModal" tabindex="-1" aria-labelledby="jsonModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="jsonModalLabel">Export / Import Journal Data</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+         <textarea id="jsonData" class="form-control" rows="10" placeholder="Your journal data in JSON format will appear here..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <!-- New "Select File" button -->
+        <button type="button" class="btn btn-warning" id="selectFile">Select File</button>
+        <button type="button" class="btn btn-primary" id="saveToFile">Save to File</button>
+        <button type="button" class="btn btn-success" id="importData">Import</button>
+        <button type="button" class="btn btn-secondary" id="copyToClipboard">Copy to Clipboard</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
   <!-- jQuery och Bootstrap Bundle JS -->
   <script src="../js/jquery-3.6.0.min.js"></script>
@@ -282,31 +306,121 @@
         location.reload();
     });
 
-    $(document).on("click", "#save", function() {
-        var blob = new Blob([JSON.stringify(localStorage)], {type: "text/plain;charset=utf-8"});
-        saveAs(blob, "5_minute_journal.txt");
-    });
+    // Helper function to build a plain object from localStorage by parsing each value if possible.
+function getLocalStorageData() {
+  var data = {};
+  for (var i = 0; i < localStorage.length; i++) {
+    var key = localStorage.key(i);
+    try {
+      // Try to parse the value; if it fails, just store the string.
+      data[key] = JSON.parse(localStorage.getItem(key));
+    } catch (e) {
+      data[key] = localStorage.getItem(key);
+    }
+  }
+  return data;
+}
 
-    $(document).on("click", "#import", function() {
-        var input = document.createElement('input');
-        input.type = 'file';
-        input.onchange = e => { 
-            var file = e.target.files[0]; 
-            var reader = new FileReader();
-            reader.readAsText(file,'UTF-8');
-            reader.onload = readerEvent => {
-                var content = readerEvent.target.result;
-                localStorage.clear();
-                var data = JSON.parse(content);
-                for (const [key, value] of Object.entries(data)) {
-                    localStorage.setItem(key, value);
-                }
-                renderJournal();
-            }
-        }
-        input.click();
-        location.reload();
+// When the main "Save" button is clicked, populate and show the modal with exported JSON.
+$(document).on("click", "#save", function() {
+  // Build a plain object and stringify it as a compact JSON string.
+  var jsonData = JSON.stringify(getLocalStorageData());
+  $("#jsonData").val(jsonData);
+  var myModal = new bootstrap.Modal(document.getElementById('jsonModal'));
+  myModal.show();
+
+  // Hide the import buttons
+  $("#selectFile").hide();
+  $("#saveToFile").show();
+  $("#importData").hide();
+  $("#copyToClipboard").show();
+  $("#jsonData").attr("placeholder", "Your journal data in JSON format will appear here...");
+});
+
+// When the main "Import" button is clicked, open the modal with an empty textarea.
+$(document).on("click", "#import", function() {
+  $("#jsonData").val("");
+  var myModal = new bootstrap.Modal(document.getElementById('jsonModal'));
+  myModal.show();
+
+  // Hide the save buttons and show import buttons
+  $("#selectFile").show();
+  $("#saveToFile").hide();
+  $("#importData").show();
+  $("#copyToClipboard").hide();
+  $("#jsonData").attr("placeholder", "Paste your JSON data here...");
+});
+
+// "Select File" button: Open a file picker and paste file contents into the textarea.
+$(document).on("click", "#selectFile", function() {
+  // Create a hidden file input element.
+  var input = document.createElement("input");
+  input.type = "file";
+  // Optional: Limit accepted file types (e.g., JSON or text).
+  input.accept = ".json,.txt";
+  
+  input.onchange = function(e) {
+    var file = e.target.files[0];
+    var reader = new FileReader();
+    reader.onload = function(event) {
+      // Paste the file's content into the textarea.
+      $("#jsonData").val(event.target.result);
+    };
+    reader.onerror = function(err) {
+      alert("Error reading file: " + err);
+    };
+    reader.readAsText(file, "UTF-8");
+  };
+  
+  // Trigger the file input dialog.
+  input.click();
+});
+
+// "Save to File" button: Download the JSON contents to a file.
+$(document).on("click", "#saveToFile", function() {
+  var data = $("#jsonData").val();
+  var blob = new Blob([data], { type: "text/plain;charset=utf-8" });
+  var url = window.URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = "HappyDayBook.json";
+  a.click();
+  window.URL.revokeObjectURL(url);
+});
+
+// "Copy to Clipboard" button: Copy the JSON contents from the textarea.
+$(document).on("click", "#copyToClipboard", function(){
+  var textarea = document.getElementById("jsonData");
+  textarea.select();
+  document.execCommand("copy");
+  alert("Data copied to clipboard.");
+});
+
+// "Import" button inside the modal: Parse the JSON, update localStorage, and reload the page.
+$(document).on("click", "#importData", function(){
+  try {
+    var jsonText = $("#jsonData").val();
+    var importedData = JSON.parse(jsonText);
+    localStorage.clear();
+    Object.entries(importedData).forEach(function([key, value]) {
+      // If value is an object, store its string representation; otherwise, store as is.
+      localStorage.setItem(key, typeof value === "object" ? JSON.stringify(value) : value);
     });
+    alert("Import successful!");
+    location.reload();
+  } catch(e) {
+    alert("Error importing data: " + e.message);
+  }
+});
+
+
+
+    // Close the splash screen when the device is ready, don't know if its doing anything but lets keep it.
+    document.addEventListener('deviceready', function() {
+      if (navigator.splashscreen) {
+        navigator.splashscreen.hide();
+      }
+    }, false);
 
     $(window).resize(function() {
       var width = $(window).innerWidth();
@@ -454,7 +568,7 @@
       if(!printedTodaysDate){
         htmlPages.push(renderPage(currentDate, emptyPageData));
       }
-      if(htmlPages.length % 2 == 0){
+      if(display == "double" && htmlPages.length % 2 == 0){
         htmlPages.push(renderPage(getTomorrowDate(), emptyPageData));
       }
       htmlPages.push($("#info_page").clone());
