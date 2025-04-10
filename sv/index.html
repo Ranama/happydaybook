@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Happy day book</title>
-  <!-- Page description -->
-  <meta name="description" content="Answer 3 questions everyday to massively improve your life, mood and hapiness, Inspired by the 5 minute journal." />
-  <!-- Page favicon -->
-  <link rel="icon" href="img/icon.png" />
+  <title>Glad dagbok</title>
+  <!-- Sidbeskrivning -->
+  <meta name="description" content="Svara på 3 frågor varje dag för att avsevärt förbättra ditt liv, ditt humör och din lycka, inspirerad av 5 Minute Journal." />
+  <!-- Sidans favicon -->
+  <link rel="icon" href="../img/icon.png" />
   <!-- Bootstrap CSS -->
-  <link href="css/bootstrap.min.css" rel="stylesheet" />
+  <link href="../css/bootstrap.min.css" rel="stylesheet" />
   <!-- Bootstrap Icons -->
-  <link rel="stylesheet" href="css/bootstrap-icons.css" />
+  <link rel="stylesheet" href="../css/bootstrap-icons.css" />
   <style>
-    /* Remove extra margin and padding from main boxes */
+    /* Ta bort extra marginaler och padding från huvudboxarna */
     #flipbook {
       background-color: #acbbca;
     }
@@ -22,27 +22,27 @@
       padding: 0;
     }
     .journal-page {
-      width: 50vw; /* two pages per viewport */
+      width: 50vw; /* två sidor per vy */
       height: 100vh;
       overflow-y: auto;
       box-sizing: border-box;
-      border: 1px solid #ddd; /* optional, to mimic a page border */
+      border: 1px solid #ddd; /* valfritt, för att efterlikna en sidram */
       text-align: center;
       background-color: #acbbca;
     }
-    /* Morning section with light background */
+    /* Morgonsektion med ljus bakgrund */
     .morning {
       background-color: #fff9e8;
       padding:10px;
       padding-top: 0;
     }
-    /* Evening section with dark background */
+    /* Kvällssektion med mörk bakgrund */
     .evening {
       padding:10px;
       padding-bottom: 0;
     }
     
-    /* Spacing for Bootstrap input groups */
+    /* Avstånd för Bootstrap input-grupper */
     .input-group {
       margin-bottom: 10px;
       text-align: left;
@@ -75,84 +75,73 @@
   </style>
 </head>
 <body>
-  <!-- Audio element for the page-flip sound -->
-  <audio id="page-flip-sound" src="sound/turnpage-99756.mp3"></audio>
+  <!-- Ljud för sidvändningsljud -->
+  <audio id="page-flip-sound" src="../sound/turnpage-99756.mp3"></audio>
     <div id="flipbook">
-        <div class="journal-page morning"> <h1>Loading...</h1></div>
+        <div class="journal-page morning"> <h1>Laddar...</h1></div>
         <div id="info_page" class="journal-page morning">
             <div class="row justify-content-center">
                 <div class="col-8">
-                    <h3>How to use?</h3>
-                        <div class="border text-start rounded p-1"><i class="bi bi-sun-fill"></i> Answer 3 morning questions as soon as you wake up.</div>
-                        <div class="border text-start rounded p-1" style="background-color: #acbbca;"><i class="bi bi-moon-fill"></i> Answer 2 evening questions before you go to sleep.</div>
-                    </ol>
-                    <p class="text-start">Every day you will get a new page to fill out. <br>It's that simple!</p>
-                    <p class="text-start">It's not important what you write, <b>the only important thing is that you write something everyday</b>, this will change your mind into looking for positive things within your life and destroy your negative thought patterns.</p>
-                
-                    <p class="text-start"></p>
-                    <p class="text-start">If you need a positive motivation, you can go back and look at previous days, see what you have been greatful for and acomplished.</p>
+                    <h3>Hur använder man?</h3>
+                        <div class="border text-start rounded p-1"><i class="bi bi-sun-fill"></i> Svara på 3 morgonfrågor så fort du vaknar.</div>
+                        <div class="border text-start rounded p-1" style="background-color: #acbbca;"><i class="bi bi-moon-fill"></i> Svara på 2 kvällsfrågor innan du går och lägger dig.</div>
+                    <p class="text-start">Varje dag får du en ny sida att fylla i. <br>Så enkelt är det!</p>
+                    <p class="text-start">Det spelar ingen roll vad du skriver, <b>det viktigaste är att du skriver något varje dag</b> – detta kommer att förändra ditt sätt att se på livet genom att fokusera på det positiva och bryta ner dina negativa tankemönster.</p>
+                    <p class="text-start">Om du behöver positiv motivation kan du gå tillbaka och titta på tidigare dagar, se vad du har varit tacksam för och åstadkommit.</p>
                     <p class="text-start">
-                      <b>Pages: <span id="pages_amount">1337</span></b> Navigate by pulling corners <i class="bi bi-file-earmark-text"></i> <i class="bi bi-sticky"></i> or use <span class="bi bi-arrow-left-square"></span> / <span class="bi bi-arrow-right-square"></span> arrow keys.
-                      <button id="save" class = "btn btn-sm btn-success"><i class="bi bi-cloud-download"></i> Save</button>
-                      <button id="import" class = "btn btn-sm btn-primary"><i class="bi bi-cloud-upload"></i> Import</button>
+                      <b>Sidor: <span id="pages_amount">1337</span></b> Navigera genom att dra i hörnen <i class="bi bi-file-earmark-text"></i> <i class="bi bi-sticky"></i> eller använd <span class="bi bi-arrow-left-square"></span> / <span class="bi bi-arrow-right-square"></span> piltangenter.
+                      <button id="save" class="btn btn-sm btn-success"><i class="bi bi-cloud-download"></i> Spara</button>
+                      <button id="import" class="btn btn-sm btn-primary"><i class="bi bi-cloud-upload"></i> Importera</button>
+                      <button id="engflag" class="btn btn-sm btn-primary p-0"><img src="../img/engflag.png" alt="english"></button>
                     </p>
                   </div>
                 <div class="col-10">
-                    <h3>Why journal?</h3>
+                    <h3>Varför skriva dagbok?</h3>
                     <p class="text-start">
-                        Journaling is the most simple daily habit that can transform your mental and emotional well‐being. Take a few minutes each day to write down your thoughts, feelings, and experiences. Research in psychology shows that regular journaling lowers anxiety, boost mood, and even help prevent depression. When you document your day, you reflect on your successes and also learn valuable lessons from challenges, which creates a positive mindset.
+                        Att skriva dagbok är den enklaste dagliga vanan som kan förändra ditt mentala och emotionella välmående. Ta några minuter varje dag för att skriva ner dina tankar, känslor och upplevelser. Forskning inom psykologi visar att regelbundet dagboksskrivande minskar ångest, förbättrar humöret och till och med kan hjälpa till att förebygga depression. När du dokumenterar din dag reflekterar du över dina framgångar och lär dig även värdefulla läxor från utmaningar, vilket skapar en positiv inställning.
                     </p>
                     <p class="text-start">
-                        Science-backed studies found that spending less than 5 minutes each day will clear your mind, improve your overall mental clarity, destory negative thought patterns and replace them with positive ones. As you track your progress and celebrate small victories, you naturally cultivate gratitude and self-awareness, two key ingredients for long-term happiness.
+                        Vetenskapligt underbyggda studier har visat att om du ägnar mindre än 5 minuter varje dag rensar du ditt sinne, förbättrar din mentala klarhet, bryter ned negativa tankemönster och ersätter dem med positiva. När du följer dina framsteg och firar små segrar odlar du naturligt tacksamhet och självmedvetenhet – två viktiga ingredienser för långvarig lycka.
                     </p>
                     <p class="text-start">
-                        Journaling serves as a form of self-care that is accessible to everyone. It requires nothing more than a few minutes every day, yet its impact is profound. Whether you’re setting goals, expressing gratitude, or simply venting your thoughts, journaling encourages you to look inward and grow from within. Embracing this habit can not only enhance your mood on a daily basis but also create a foundation for a healthier, happier life. Give journaling a try—you will find that it’s the best free tool available for improving your mental health and overall quality of life.
+                        Att skriva dagbok fungerar som en form av egenvård som är tillgänglig för alla. Det kräver inget mer än några minuter varje dag, men dess inverkan är djupgående. Oavsett om du sätter upp mål, uttrycker tacksamhet eller bara ventilerar dina tankar, uppmuntrar dagboksskrivande dig att se inåt och växa inifrån. Att omfamna denna vana kan inte bara förbättra ditt dagliga humör utan också lägga grunden för ett hälsosammare och lyckligare liv. Prova att skriva dagbok – du kommer att upptäcka att det är det bästa gratisverktyget för att förbättra din mentala hälsa och livskvalitet.
                     </p>
-                    </div>
+                  </div>
             </div>
-            <h3>Example day:</h3>
+            <h3>Exempeldag:</h3>
             <div id="example_day"></div>
         </div>
     </div>
 
+  <!-- jQuery och Bootstrap Bundle JS -->
+  <script src="../js/jquery-3.6.0.min.js"></script>
+  <script src="../js/bootstrap.bundle.min.js"></script>
 
-  <!-- jQuery and Bootstrap Bundle JS -->
-  <script src="js/jquery-3.6.0.min.js"></script>
-  <script src="js/bootstrap.bundle.min.js"></script>
-
-  <!-- Turn.js (from CDN) -->
-  <script type="text/javascript" src="js/turn.min.js"></script>
+  <!-- Turn.js (från CDN, version 3) -->
+  <script type="text/javascript" src="../js/turn.min.js"></script>
   <script type="text/javascript">
     /* 
-    Using this plugin: http://www.turnjs.com/ 
-    plugin api documentation: http://www.turnjs.com/turnjs4-api-docs.pdf
+    Använder detta plugin: http://www.turnjs.com/ 
+    Plugin-dokumentation: http://www.turnjs.com/turnjs4-api-docs.pdf
     */
-   /* ####################### Load journal ################################### */
+    /* ####################### Ladda dagboken ################################### */
     pagesRendered = false;
-    // Render the journal on document ready using the sample data.
     $(document).ready(function () {
       renderJournal();
-
-      // Turn to the last page 
+      // Vänd till sista sidan 
 	    $('#flipbook').turn('page', $('#flipbook').turn('pages') - 1);
-
-      // Peel the Corner to the left
-      // $('#flipbook').turn('peel', 50);  // dont work since it needs the version 4
-      
+      // $('#flipbook').turn('peel', 50);  // fungerar inte med version 4
       pagesRendered = true;
     });
 
-    /* ####################### Data change  ################################### */
-    // On data changing in any of the input or text fields, update the JSON dictionary in the localStorage
+    /* ####################### Ändra data ################################### */
     $(document).on("keyup", "input, textarea", function() {
         let date = $(this).closest(".journal-page").attr("id").replace("date-", "");
         let jsonData = getJsonFromPage(date);
-        // Save the JSON data to localStorage
         localStorage.setItem(date, JSON.stringify(jsonData));
     });
 
-    /* ####################### Navigation ################################### */
-    // Navigation on key press left and right arrow keys
+    /* ####################### Navigering ################################### */
     $(document).keydown(function (e) {
       let pages = $('#flipbook').turn('pages');
       let page = $('#flipbook').turn('page');
@@ -178,15 +167,14 @@
       if(!pagesRendered){
         return;
       }
-      // Play page flip sound
       document.getElementById("page-flip-sound").play();
     }
 
-    $('#flipbook').on('touchstart mousedown', function(e) {
+    $('#flipbook').on('touchstart mousedown', function(e){
       var rect = this.getBoundingClientRect();
       var startX, startY;
       
-      if (e.type === 'touchstart') {
+      if(e.type === 'touchstart'){
         startX = e.originalEvent.touches[0].clientX;
         startY = e.originalEvent.touches[0].clientY;
       } else {
@@ -194,15 +182,12 @@
         startY = e.pageY;
       }
       
-      // Determine which side the user touched relative to the flipbook.
       var xRelative = startX - rect.left;
       var corner = (xRelative < rect.width / 2) ? "left" : "right";
 
-      // Check if the starting position is near any edge of the viewport.
       var viewportWidth = window.innerWidth;
       var viewportHeight = window.innerHeight;
       var isEdge = false;
-      // If within 10% of any side of the viewport.
       if (startX < viewportWidth * 0.1 ||
           startX > viewportWidth * 0.9 ||
           startY < viewportHeight * 0.1 ||
@@ -210,7 +195,6 @@
         isEdge = true;
       }
       
-      // Store the start values and initialize the scrolling flag.
       $(this).data('startCorner', corner);
       $(this).data('startX', startX);
       $(this).data('startY', startY);
@@ -219,19 +203,11 @@
     });
 
     $('#flipbook').on('touchmove', function(e) {
-      /*
-      // Better to not have this, it makes the page seem bugged when scrolling at edge.
-      if ($(this).data('isEdge')) {
-        return;
-      }
-        */
-
-      // Determine movement from start.
       var startX = $(this).data('startX');
       var startY = $(this).data('startY');
       var currentX, currentY;
       
-      if (e.type === 'touchmove') {
+      if(e.type === 'touchmove'){
         currentX = e.originalEvent.touches[0].clientX;
         currentY = e.originalEvent.touches[0].clientY;
       }
@@ -239,21 +215,20 @@
       var dx = Math.abs(currentX - startX);
       var dy = Math.abs(currentY - startY);
       
-      // If vertical movement is significantly larger than horizontal, consider it a scroll.
-      if (dy > dx * 2) {
+      if(dy > dx * 2){
         $(this).data('isScrolling', true);
       }
     });
 
-    $('#flipbook').on('touchend mouseup', function(e) {
+    $('#flipbook').on('touchend mouseup', function(e){
       // Set threshhold to 20% of screen witdth
       var threshold = $(window).width() * 0.2; //100;  // minimum drag threshhold to swtich page in pixels
       var startX = $(this).data('startX');
       var startY = $(this).data('startY');
       var endX, endY;
       
-      if (e.type === 'touchend') {
-        if (e.originalEvent.changedTouches.length) {
+      if(e.type === 'touchend'){
+        if(e.originalEvent.changedTouches.length){
           endX = e.originalEvent.changedTouches[0].clientX;
           endY = e.originalEvent.changedTouches[0].clientY;
         }
@@ -264,55 +239,44 @@
       
       var dx = Math.abs(endX - startX);
       var dy = Math.abs(endY - startY);
-      
-      // If movement is minimal or it was determined to be a scroll, do nothing.
-      if ((dx < threshold && dy < threshold) || $(this).data('isScrolling')) {
+      if((dx < threshold && dy < threshold) || $(this).data('isScrolling')){
         return;
       }
       
-      // Otherwise, use the starting corner to decide which page to turn.
       let displayDouble = $('#flipbook').turn('display') == "double";
       var corner = $(this).data('startCorner');
       let nextPage = $('#flipbook').turn('page');
       let totalPages = $('#flipbook').turn('pages');
-      if (corner === "right") {
+      if(corner === "right"){
         playPageFlipSound();
         nextPage += 1;
-        if (displayDouble && (nextPage == totalPages || nextPage + 1 == totalPages)) {
-          // If going to last page, go to front cover.
-          // event.preventDefault();
-          $('#flipbook').turn('page', 2);//.turn('stop');
-        }else if(!displayDouble && (nextPage == totalPages || nextPage == totalPages + 1)){
-          $('#flipbook').turn('page', 2);//.turn('stop');
-        }else {
-          $('#flipbook').turn('next');//.turn('stop');
+        if(displayDouble && (nextPage == totalPages || nextPage + 1 == totalPages)){
+          $('#flipbook').turn('page', 2);
+        } else if(!displayDouble && (nextPage == totalPages || nextPage == totalPages + 1)){
+          $('#flipbook').turn('page', 2);
+        } else {
+          $('#flipbook').turn('next');
         }
-      } else if (corner === "left") {
-        // console.log("Left corner");
+      } else if(corner === "left"){
         playPageFlipSound();
         nextPage -= 1;
-        if (displayDouble && (nextPage == 1 || nextPage == 2)) {
-          // If going to front cover, go to last page instead.
-          $('#flipbook').turn('page', totalPages - 1);//.turn('stop');
-        } else if (!displayDouble && (nextPage == 1 || nextPage == 0)){
-          $('#flipbook').turn('page', totalPages - 1);//.turn('stop');
+        if(displayDouble && (nextPage == 1 || nextPage == 2)){
+          $('#flipbook').turn('page', totalPages - 1);
+        } else if(!displayDouble && (nextPage == 1 || nextPage == 0)){
+          $('#flipbook').turn('page', totalPages - 1);
         } else {
-          $('#flipbook').turn('previous');//.turn('stop');
+          $('#flipbook').turn('previous');
         }
       }
     });
 
-    /* ####################### IMPORT/EXPORT json journal ################################### */
-    // Save button
+    /* ####################### IMPORT/EXPORT JSON-dagboken ################################### */
     $(document).on("click", "#save", function() {
-        // Save the localStorage to a file on the users computer
         var blob = new Blob([JSON.stringify(localStorage)], {type: "text/plain;charset=utf-8"});
         saveAs(blob, "5_minute_journal.txt");
     });
 
-    // Import button
     $(document).on("click", "#import", function() {
-        // Import the file to localStorage
         var input = document.createElement('input');
         input.type = 'file';
         input.onchange = e => { 
@@ -330,69 +294,51 @@
             }
         }
         input.click();
-
-        // reload page
         location.reload();
     });
 
-    // When resizing the window, re-render the journal if the window changes size over or under 600 px width
     $(window).resize(function() {
       var width = $(window).innerWidth();
-      // $("#example_day").turn('width', width);
       if(width < 600){
         $('#flipbook').turn('display', 'single');
-      }else{
+      } else {
         $('#flipbook').turn('display', 'double');
       }
     });
 
-    
-    /* ####################### FUNCTIONS ################################### */
-    // Renders a single journal page.
+    /* ####################### FUNKTIONER ################################### */
     function renderPage(date, pageData) {
       let pageDiv = $('<div class="journal-page" id="date-' + date + '""></div>');
-
-      // --- Morning Section ---
       let morningSection = $('<div class="morning"></div>');
-      // Date row with sun icon
       let morningHeader = $('<div class="d-flex align-items-center flex-row-reverse"></div>')
                       .append('<i class="bi bi-sun-fill sun"></i>');
       morningSection.append(morningHeader);
       morningSection.append('<h5 class="mb-0">' + date + '</h5>');
-
-      // Inspirational Quote
       let quoteAndAuthor = getQuoteAndAuthorFromDate(date);
       let quoteBlock = $('<blockquote class="mb-2"></blockquote>')
-                        .append('<p>"' + quoteAndAuthor[0] + '"</p>').append('<footer class="blockquote-footer">' + quoteAndAuthor[1] + '</footer>');
+                        .append('<p>"' + quoteAndAuthor[0] + '"</p>')
+                        .append('<footer class="blockquote-footer">' + quoteAndAuthor[1] + '</footer>');
       morningSection.append(quoteBlock);
       var disabled = "disabled";
       if(date == getCurentDate()){
         disabled = "";
       }
-      // "I am grateful for..."
-      morningSection.append('<h5>I am grateful for...</h5>');
+      morningSection.append('<h5>Jag är tacksam för...</h5>');
       pageData.gratefulFor.forEach((item, index) => {
         let inputGroup = $('<div class="input-group"></div>')
             .append('<input ' + disabled + ' id="' + date + 'grateful' + index + '" type="text" class="form-control" value="' + item + '" placeholder="' + (index + 1) + '...">');
           morningSection.append(inputGroup);
       });
-
-      // "What would make today great?"
-      morningSection.append('<h5>What would make today great?</h5>');
+      morningSection.append('<h5>Vad skulle göra dagen fantastisk?</h5>');
       pageData.whatWouldMakeTodayGreat.forEach((item, index) => {
         let inputGroup = $('<div class="input-group"></div>')
             .append('<input ' + disabled + ' id="' + date + 'todayGreat' + index + '" type="text" class="form-control" value="' + item + '" placeholder="' + (index + 1) + '...">');
           morningSection.append(inputGroup);
       });
-
-      // "Daily affirmation" (2 rows)
-      morningSection.append('<h5>Daily affirmation</h5>');
+      morningSection.append('<h5>Daglig affirmation</h5>');
       let inputGroup = $('<div class="input-group"></div>')
-        .append('<textarea ' + disabled + ' type="text" class="form-control" placeholder="I am...">' + (pageData.dailyAffirmation || '') + '</textarea>');
+        .append('<textarea ' + disabled + ' type="text" class="form-control" placeholder="Jag är...">' + (pageData.dailyAffirmation || '') + '</textarea>');
       morningSection.append(inputGroup);
-
-      // --- Evening Section ---
-      // If previous day, enable editing of night section, because some people might go to bed after 00.00
       if(date == getPreviousDayDate()){
         disabled = "";
       }
@@ -400,42 +346,25 @@
       let eveningHeader = $('<div class="d-flex align-items-center flex-row-reverse" style="margin-bottom: -24px; margin-right: 10px;"></div>')
                             .append('<i class="bi bi-moon-fill moon"></i>');
       eveningSection.append(eveningHeader);
-
-      // "Highlights of the day" (3 items)
-      eveningSection.append('<h5>Highlights of the day</h5>');
+      eveningSection.append('<h5>Dagens höjdpunkter</h5>');
       pageData.highlightsOfDay.forEach((item, index) => {
         let inputGroup = $('<div class="input-group"></div>')
             .append('<input ' + disabled + ' id="' + date + 'highlight' + index + '" type="text" class="form-control" value="' + item + '" placeholder="' + (index + 1) + '...">');
           eveningSection.append(inputGroup);
-        
       });
-
-      // "What did I learn today" (2 items)
-      eveningSection.append('<h5>What did I learn today?</h5>');
+      eveningSection.append('<h5>Vad lärde jag mig idag?</h5>');
       inputGroup = $('<div class="input-group"></div>')
-      .append('<textarea ' + disabled + ' type="text" class="form-control" placeholder="Today I learned...">' + (pageData.whatDidILearn || '') + '</textarea>');
+      .append('<textarea ' + disabled + ' type="text" class="form-control" placeholder="Idag lärde jag mig...">' + (pageData.whatDidILearn || '') + '</textarea>');
       eveningSection.append(inputGroup);
-
-      // Append both sections to the page container
       pageDiv.append(morningSection);
       pageDiv.append(eveningSection);
       return pageDiv;
     }
 
-    // Main function that accepts a JSON object and renders all pages.
-    /*
-    Localstorage data structure (if date == current date, then it's tadays page):
-    {
-      "2025-03-01": { ... },
-      "2025-03-02": { ... },
-      "2025-03-03": { ... }
-    }
-    */
-
     function getCurentDate(){
       let today = new Date();
       let dd = String(today.getDate()).padStart(2, '0');
-      let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+      let mm = String(today.getMonth() + 1).padStart(2, '0');
       let yyyy = today.getFullYear();
       return yyyy + '-' + mm + '-' + dd;
     }
@@ -445,7 +374,7 @@
       let yesterday = new Date(today);
       yesterday.setDate(yesterday.getDate() - 1);
       let dd = String(yesterday.getDate()).padStart(2, '0');
-      let mm = String(yesterday.getMonth() + 1).padStart(2, '0'); //January is 0!
+      let mm = String(yesterday.getMonth() + 1).padStart(2, '0');
       let yyyy = yesterday.getFullYear();
       return yyyy + '-' + mm + '-' + dd;
     }
@@ -455,14 +384,12 @@
       let tomorrow = new Date(today);
       tomorrow.setDate(tomorrow.getDate() + 1);
       let dd = String(tomorrow.getDate()).padStart(2, '0');
-      let mm = String(tomorrow.getMonth() + 1).padStart(2, '0'); //January is 0!
+      let mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
       let yyyy = tomorrow.getFullYear();
       return yyyy + '-' + mm + '-' + dd;
     }
 
     function renderJournal() {
-      // Set the flipbook options to full screen size height and width
-      // get the size of the screen and set the flipbook size
       var width = $(window).innerWidth();
       var height = $(window).innerHeight();
       let display = 'double';
@@ -473,17 +400,13 @@
           width: width,
           height: height,
           autoCenter: true,
-          display: display, //'single', // double
+          display: display,
       });
-
-      // Create an array of pages so we can sort it by date
       let pages = [];
       for (const [key, value] of Object.entries(localStorage)) {
         pages.push({ date: key, data: value });
       }
-      // Sort the pages by date
       pages.sort((a, b) => (a.date > b.date) ? 1 : -1);
-
       let htmlPages = [];
       let emptyPageData = {
         "gratefulFor": ["", "", ""],
@@ -492,16 +415,12 @@
         "highlightsOfDay": ["", "", ""],
         "whatDidILearn": ""
       };
-
-      // Get the pages from locastorage
       let printedTodaysDate = false;
       let printedYesterdaysDate = false;
       let currentDate = getCurentDate();
       let previousDayDate = getPreviousDayDate();
       for (let i = 0; i < pages.length; i++) {
-        // Get current date from javascript
         if(pages[i].date == currentDate){
-          // Print yesterdays date if current date is included and yesterday is not printed yet.
           if(!printedYesterdaysDate){
             htmlPages.push(renderPage(previousDayDate, emptyPageData));
             printedYesterdaysDate = true;
@@ -511,10 +430,8 @@
         if(pages[i].date == previousDayDate){
           printedYesterdaysDate = true;
         }
-        // Print the page
         htmlPages.push(renderPage(pages[i].date, JSON.parse(pages[i].data)));
       }
-      // Print empty pages for yesterday and today and tomorrow if not printed already
       if(htmlPages.length > 0){
         if(!printedYesterdaysDate){
           htmlPages.push(renderPage(previousDayDate, emptyPageData));
@@ -523,30 +440,19 @@
       if(!printedTodaysDate){
         htmlPages.push(renderPage(currentDate, emptyPageData));
       }
-
-      // If total even pages, add tomorrows date page at end
       if(htmlPages.length % 2 == 0){
         htmlPages.push(renderPage(getTomorrowDate(), emptyPageData));
       }
-
-      // Add a last page same as the info page, should never be seen, but sometimes happen because of the turn.js bug.
       htmlPages.push($("#info_page").clone());
-
-      // Render the pages
       var i = 3;
       htmlPages.forEach(page => {
         $("#flipbook").turn("addPage", page, i);
         i ++;
       });
-
-      // Print amount of pages
       $("#pages_amount").text(htmlPages.length);
-
-      // print example page
       $("#example_day").html(renderPage("1337-04-20", examplePage));
     }
     
-    // Function to save a blob to a file
     function saveAs(blob, fileName) {
         var url = window.URL.createObjectURL(blob);
         var a = document.createElement("a");
@@ -555,7 +461,6 @@
         a.click();
     }
 
-    // Get the json data from a specific page element with the specific date specified
     function getJsonFromPage(date){
         let pageElement = $("#date-" + date);
         if(pageElement.length == 0){
@@ -564,33 +469,133 @@
         return {
             "gratefulFor": [$("#" + date + "grateful0").val(), $("#" + date + "grateful1").val(), $("#" + date + "grateful2").val()],
             "whatWouldMakeTodayGreat": [$("#" + date + "todayGreat0").val(), $("#" + date + "todayGreat1").val(), $("#" + date + "todayGreat2").val()],
-            "dailyAffirmation": pageElement.find("h5:contains('Daily affirmation') + div textarea").val(),
+            "dailyAffirmation": pageElement.find("h5:contains('Daglig affirmation') + div textarea").val(),
             "highlightsOfDay": [$("#" + date + "highlight0").val(), $("#" + date + "highlight1").val(), $("#" + date + "highlight2").val()],
-            "whatDidILearn": pageElement.find("h5:contains('What did I learn today?') + div textarea").val()
+            "whatDidILearn": pageElement.find("h5:contains('Vad lärde jag mig idag?') + div textarea").val()
         }
     }
 
-    // Get the quote and author from the list, selected by date
     function getQuoteAndAuthorFromDate(date){
-      // Split date into year, month and day numbers
       let dateNumbers = date.split("-").map(Number);
-      // Sum all list numbers into a integer
       let sum = dateNumbers.reduce((a, b) => a + b, 0);
-      // Pick a quote and author from the list depending on the sum of the date numbers
       let index = sum % quoteAndAuthorList.length;
       return quoteAndAuthorList[index];
     }
 
     const examplePage = 
         {
-          "gratefulFor": ["Family", "Health", "Opportunities"],
-          "whatWouldMakeTodayGreat": ["Smile", "Take a walk", "Drink water"],
-          "dailyAffirmation": "I am strong\nI improve every day",
-          "highlightsOfDay": ["Finished a project", "Had a good meal", "Met a friend"],
-          "whatDidILearn": "I learned how to use this awesome journal to boost my mood, be happier and level up my life."
+          "gratefulFor": ["Familj", "Hälsa", "Möjligheter"],
+          "whatWouldMakeTodayGreat": ["Le", "Ta en promenad", "Drick vatten"],
+          "dailyAffirmation": "Jag är stark\nJag blir bättre varje dag",
+          "highlightsOfDay": ["Avslutade ett projekt", "Fick en god måltid", "Träffade en vän"],
+          "whatDidILearn": "Jag lärde mig att använda denna fantastiska dagbok för att förbättra mitt humör, bli lyckligare och ta mitt liv till nästa nivå."
         };
 
     const quoteAndAuthorList = [
+        ["Det enda som hindrar oss från att skapa en bättre framtid är våra tvivel idag.", "Brian Tracy"],
+        ["Varje dag bjuder på en ny början.", "Mohamed"],
+        ["Tro på att du klarar det – då är du redan halvvägs till målet.", "Theodore Roosevelt"],
+        ["Framtiden tillhör dem som tror på drömmarnas skönhet.", "Eleanor Roosevelt"],
+        ["Titta inte på klockan, gör som den – fortsätt framåt.", "Sam Levenson"],
+        ["Håll blicken mot solen, så hamnar skuggorna bakom dig.", "Walt Whitman"],
+        ["Det spelar ingen roll hur långsamt du går, så länge du aldrig stannar.", "Confucius"],
+        ["Framgång är inte slutgiltig och misslyckande är inte ödesdigert – det är modet att fortsätta som räknas.", "Winston Churchill"],
+        ["Svårigheter gör vanliga människor redo för en enastående framtid.", "C.S. Lewis"],
+        ["Det bästa sättet att förutsäga din framtid är att skapa den själv.", "Peter Drucker"],
+        ["Du är aldrig för gammal för att sätta upp ett nytt mål eller drömma en ny dröm.", "C.S. Lewis"],
+        ["Agera som om dina handlingar räknas – för de gör det.", "William James"],
+        ["Tro på dig själv och allt du är – det finns något inom dig som är större än alla hinder.", "Christian D. Larson"],
+        ["Det enda sättet att göra ett fantastiskt arbete är att älska det du gör.", "Steve Jobs"],
+        ["Om möjligheten inte knackar, bygg en dörr.", "Milton Berle"],
+        ["Dröm stort och våga misslyckas.", "Norman Vaughan"],
+        ["Allt du kan föreställa dig är verkligt.", "Pablo Picasso"],
+        ["Förvandla dina sår till visdom.", "Oprah Winfrey"],
+        ["Det som ligger bakom oss och det som väntar oss är småsaker jämfört med det som finns inom oss.", "Ralph Waldo Emerson"],
+        ["Ha blicken riktad mot stjärnorna men fötterna stadigt på marken.", "Theodore Roosevelt"],
+        ["Framgång kommer ofta till dem som är så upptagna med att göra att de inte hinner söka efter den.", "Henry David Thoreau"],
+        ["Låt inte dina rädslor styra – låt drömmarna i ditt hjärta visa vägen.", "Roy T. Bennett"],
+        ["Min framgång beror på att jag aldrig använde några ursäkter.", "Florence Nightingale"],
+        ["Ju hårdare du arbetar, desto större blir känslan när du når ditt mål.", "Ava Carter"],
+        ["Dröm, önska, och gör det.", "Ethan Reynolds"],
+        ["Framgång mäts inte i hur högt du har klättrat, utan i hur mycket du gör världen bättre.", "Roy T. Bennett"],
+        ["Din passion väntar på att ditt mod ska hinna ikapp.", "Isabelle Lafleche"],
+        ["Magin ligger i att tro på sig själv – om du kan det, kan du få allt att hända.", "Johann Wolfgang von Goethe"],
+        ["Stora prestationer uppnås inte inom en bekväm zon.", "Neil Strauss"],
+        ["Sluta inte när du är trött – sluta när du är klar.", "Marilyn Monroe"],
+        ["Vakna med beslutsamhet och gå till sängs med tillfredsställelse.", "Logan Brooks"],
+        ["Litet i taget blir mycket.", "Tanzaniskt ordspråk"],
+        ["Hemligheten till att komma framåt är att bara börja.", "Mark Twain"],
+        ["Du behöver inte vara stor för att börja, men du måste börja för att bli stor.", "Zig Ziglar"],
+        ["Smärtan idag blir din styrka imorgon.", "Gabriel Ortiz"],
+        ["Ibland testas vi inte för att visa våra svagheter, utan för att upptäcka våra styrkor.", "Lila Maxwell"],
+        ["Vänta inte på möjligheter – skapa dem själv.", "Nathaniel Cruz"],
+        ["Dröm, tro och bygg din framtid.", "Marcus Wells"],
+        ["Det bästa sättet att komma igång är att sluta prata och börja göra.", "Walt Disney"],
+        ["Det verkar alltid omöjligt tills det är gjort.", "Nelson Mandela"],
+        ["Den bästa hämnden är att nå stor framgång.", "Frank Sinatra"],
+        ["Fortsätt framåt – ge allt du har.", "Bryan Hutchinson"],
+        ["Begränsa inte dina utmaningar, utan utmana dina gränser.", "Samantha Reid"],
+        ["Du har förmågan att åstadkomma fantastiska saker.", "Sophia Grant"],
+        ["Tryck på dig själv, för ingen annan gör det åt dig.", "Dylan Matthews"],
+        ["Ibland blir 'senare' aldrig – gör det nu.", "Olivia Price"],
+        ["Gör något idag som ditt framtida jag kommer att tacka dig för.", "Evelyn Brooks"],
+        ["Små saker gör dagen stor.", "Jordan Clarke"],
+        ["Det kommer att vara tufft, men tufft betyder inte omöjligt.", "Mason Bell"],
+        ["Vänta inte – tiden blir aldrig helt rätt.", "Napoleon Hill"],
+        ["Om du vill flyga, släpp allt som tynger dig.", "Buddha"],
+        ["Den bästa tiden att plantera ett träd var för 20 år sedan; den näst bästa tiden är nu.", "Kinesiskt ordspråk"],
+        ["Ditt liv förbättras inte av en slump, det förbättras genom förändring.", "Jim Rohn"],
+        ["Det enda sättet att uppnå det omöjliga är att tro att det är möjligt.", "Charles Kingsleigh"],
+        ["Sluta inte förrän du känner stolthet över dig själv.", "Aiden Reed"],
+        ["Du behöver inte se hela trappan – ta bara det första steget.", "Martin Luther King Jr."],
+        ["Den kamp du möter idag bygger den styrka du behöver imorgon.", "Robert Tew"],
+        ["Var så bra att de inte kan blunda för dig.", "Steve Martin"],
+        ["Allt du någonsin velat ha finns på andra sidan rädslan.", "George Addair"],
+        ["Möjligheter uppstår inte av sig själva – du skapar dem.", "Chris Grosser"],
+        ["Det handlar inte om att falla, utan om att resa sig igen.", "Vince Lombardi"],
+        ["Om du kan drömma det, kan du också göra det.", "Walt Disney"],
+        ["Försök att överträffa den person du var igår.", "Matty Mullens"],
+        ["Framgång är att gå från ett misslyckande till ett annat utan att tappa entusiasmen.", "Winston Churchill"],
+        ["Framtiden beror på vad du gör idag.", "Mahatma Gandhi"],
+        ["Räkna inte dagarna – gör varje dag meningsfull.", "Muhammad Ali"],
+        ["Om du vill nå storhet, sluta be om tillåtelse.", "Alexandra Moore"],
+        ["Allt har sin egen skönhet, men inte alla ser den.", "Confucius"],
+        ["Vi skapar rädslor medan vi sitter stilla, men vi övervinner dem genom handling.", "Dr. Henry Link"],
+        ["Det enda som står mellan dig och ditt mål är de ursäkter du berättar för dig själv.", "Jordan Belfort"],
+        ["Du missar 100 % av de chanser du inte tar.", "Wayne Gretzky"],
+        ["Om ett år kan du önska att du hade börjat idag.", "Karen Lamb"],
+        ["Ditt sinne är allt – det du tänker blir du.", "Buddha"],
+        ["Ett hinder är ofta ett steg på vägen mot framgång.", "Prescott Bush"],
+        ["Misslyckanden övervinner mig aldrig om min beslutsamhet är stark nog.", "Og Mandino"],
+        ["Låt inte gårdagen ta upp för mycket av dagens tid.", "Will Rogers"],
+        ["Ju hårdare jag arbetar, desto mer tur verkar jag ha.", "Thomas Jefferson"],
+        ["Framgång handlar inte om vad du har, utan om vem du är.", "Bo Bennett"],
+        ["Jag drömde inte om framgång – jag arbetade för den.", "Estee Lauder"],
+        ["Ambition är vägen till framgång och envishet är fordonet som tar dig dit.", "Bill Bradley"],
+        ["Skillnaden mellan det vanliga och det extraordinära är det lilla extra.", "Jimmy Johnson"],
+        ["Handling är grunden till all framgång.", "Pablo Picasso"],
+        ["Din tid är begränsad – slösa den inte på att leva någon annans liv.", "Steve Jobs"],
+        ["Var inte rädd för att offra det bra för att nå det fantastiska.", "John D. Rockefeller"],
+        ["Om du tittar noga, ser du att de flesta snabba framgångar tog lång tid att bygga.", "Steve Jobs"],
+        ["Jag vaknar varje morgon och tänker: 'Hur långt kan jag driva detta företag under de kommande 24 timmarna?'", "Leah Busque"],
+        ["Det finns inget som ersätter hårt arbete.", "Thomas Edison"],
+        ["Uthållighet innebär att misslyckas 19 gånger och lyckas den 20:e.", "Julie Andrews"],
+        ["Önska inte att det vore lättare, önska att du var bättre.", "Jim Rohn"],
+        ["Den framgångsrika krigaren är en vanlig människa med en laserfokuserad målmedvetenhet.", "Bruce Lee"],
+        ["Allt du gör speglar vem du är.", "Caroline Foster"],
+        ["Hemligheten till framgång är att göra det vanliga på ett ovanligt bra sätt.", "John D. Rockefeller"],
+        ["Det enda stället där framgång kommer före arbete är i ordboken.", "Vidal Sassoon"],
+        ["Tvivel dödar fler drömmar än misslyckanden någonsin gör.", "Suzy Kassem"],
+        ["Mitt i varje svårighet döljer sig en möjlighet.", "Albert Einstein"],
+        ["Börja där du är, använd det du har och gör det du kan.", "Arthur Ashe"],
+        ["Livet består till 10 % av vad som händer oss och 90 % av hur vi reagerar.", "Charles R. Swindoll"],
+        ["Lycka är inte något färdigt – den kommer från dina egna handlingar.", "Dalai Lama"],
+        ["Om du inte kan flyga, spring; om du inte kan springa, gå; om du inte kan gå, kryp – men fortsätt alltid framåt.", "Martin Luther King Jr."],
+        ["Resan på tusen mil börjar med ett enda steg.", "Lao Tzu"]
+    ];
+
+    
+    /*[
       ["The only limit to our realization of tomorrow is our doubts of today.", "Brian Tracy"],
       ["Every day is a new beginning.", "Mohamed"],
       ["Believe you can and you're halfway there.", "Theodore Roosevelt"],
@@ -691,7 +696,7 @@
       ["Happiness is not something ready made. It comes from your own actions.", "Dalai Lama"],
       ["If you can’t fly then run, if you can’t run then walk, if you can’t walk then crawl, but whatever you do you have to keep moving forward.", "Martin Luther King Jr."],
       ["The journey of a thousand miles begins with one step.", "Lao Tzu"]
-    ];
+    ];*/
   </script>
 </body>
 </html>
