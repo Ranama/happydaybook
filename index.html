@@ -211,11 +211,15 @@
       // Play page flip sound
       document.getElementById("page-flip-sound").play();
     }
-
+    turnedCorrectly = false;
     $('#flipbook').bind('start',
     function(event, pageObject, corner){
-      if (corner=='bl' || corner=='br') {
+      // Prevent default when dragging corner, to not bug switch page when just clicking in corner.
+      if (!turnedCorrectly && (corner=='bl' || corner=='br')) {
         event.preventDefault();
+      }
+      if(turnedCorrectly){
+        turnedCorrectly = false;
       }
     });
 
@@ -301,7 +305,7 @@
       
       var dx = Math.abs(endX - startX);
       var dy = Math.abs(endY - startY);
-      console.log("dx: " + dx + ", threshold: " + threshold);
+      // console.log("dx: " + dx + ", threshold: " + threshold);
       // If movement is minimal or it was determined to be a scroll, do nothing.
       if ((dx < threshold && dy < threshold) || $(this).data('isScrolling')) {
         return;
@@ -314,6 +318,7 @@
       let totalPages = $('#flipbook').turn('pages');
       if (corner === "right") {
         playPageFlipSound();
+        turnedCorrectly = true;
         nextPage += 1;
         if (displayDouble && (nextPage == totalPages || nextPage + 1 == totalPages)) {
           // If going to last page, go to front cover.
@@ -327,6 +332,7 @@
       } else if (corner === "left") {
         // console.log("Left corner");
         playPageFlipSound();
+        turnedCorrectly = true;
         nextPage -= 1;
         if (displayDouble && (nextPage == 1 || nextPage == 2)) {
           // If going to front cover, go to last page instead.

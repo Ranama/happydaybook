@@ -198,6 +198,17 @@
       }
       document.getElementById("page-flip-sound").play();
     }
+    turnedCorrectly = false;
+    $('#flipbook').bind('start',
+    function(event, pageObject, corner){
+      // Prevent default when dragging corner, to not bug switch page when just clicking in corner.
+      if (!turnedCorrectly && (corner=='bl' || corner=='br')) {
+        event.preventDefault();
+      }
+      if(turnedCorrectly){
+        turnedCorrectly = false;
+      }
+    });
 
     $('#flipbook').bind('start',
     function(event, pageObject, corner){
@@ -285,6 +296,7 @@
       let totalPages = $('#flipbook').turn('pages');
       if(corner === "right"){
         playPageFlipSound();
+        turnedCorrectly = true;
         nextPage += 1;
         if(displayDouble && (nextPage == totalPages || nextPage + 1 == totalPages)){
           $('#flipbook').turn('page', 2);
@@ -295,6 +307,7 @@
         }
       } else if(corner === "left"){
         playPageFlipSound();
+        turnedCorrectly = true;
         nextPage -= 1;
         if(displayDouble && (nextPage == 1 || nextPage == 2)){
           $('#flipbook').turn('page', totalPages - 1);
